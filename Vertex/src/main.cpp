@@ -9,8 +9,10 @@ using namespace std;
 
 int main(void)
 {
-  Vertex<int>* vertex = new Vertex<int>(3);
-  cout << vertex->GetData() << endl;
+  Vertex<int>* vertex = new Vertex<int>(0, 3);
+  
+  cout << "Vertex " << vertex->GetID() << ": " << vertex->GetData() << endl;
+
   delete vertex;
 
   return 0;
