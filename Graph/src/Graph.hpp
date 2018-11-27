@@ -84,7 +84,24 @@ void Graph<T>::AddVertex(int id, const T& data)
 template <class T>
 void Graph<T>::RemoveVertex(int id)
 {
+  typename map<int, Vertex<T>*>::iterator it;
 
+  //disconnect all vertices connected to this vertex
+  for (it = m_map.begin(); it != m_map.end(); it++)
+  {
+    if (it->second->IsConnectedTo(id))
+    {
+      DisconnectVertices(it->second->GetID(), id);
+    }
+  }
+
+  //disconnect all vertices this vertex is connected to
+  it = m_map.find(id);
+  Vertex<T> *vertex = it->second;
+  vertex->m_adjacencyList.clear();
+
+  //remove entry from the map
+  m_map.erase(it);
 }
 
 template <class T>
@@ -118,7 +135,13 @@ void Graph<T>::DisconnectVertices(int from, int to)
 template <class T>
 void Graph<T>::Clear()
 {
+  typename map<int, Vertex<T>*>::iterator it;
 
+  //remove all vertices
+  for (it = m_map.begin(); it != m_map.end(); it++)
+  {
+    RemoveVertex(it->first);
+  }
 }
 
 template <class T>

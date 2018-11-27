@@ -11,6 +11,8 @@ int main(void)
 {
   Graph<int>* graph = new Graph<int>();
 
+  cout << "Building Graph" << endl;
+
   graph->AddVertex(0, 72);
   graph->AddVertex(1, 53);
   graph->AddVertex(2, 97);
@@ -21,8 +23,17 @@ int main(void)
   graph->ConnectVertices(1, 2, 3);
   graph->ConnectVertices(2, 1, 3);
 
-  //graph->DisconnectVertices(1, 0);
+  cout << "Graph Built" << endl;
+  graph->Print();
 
+  graph->RemoveVertex(1);
+
+  cout << "Removed Vertex" << endl;
+  graph->Print();
+  
+  graph->Clear();
+
+  cout << "Graph Cleared" << endl;
   graph->Print();
 
   delete graph;

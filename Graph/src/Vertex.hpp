@@ -26,6 +26,8 @@ public:
   //Destructor
   ~Vertex();
 
+  bool IsConnectedTo(int id);
+
   T& GetData();
   int GetID();
 
@@ -61,6 +63,19 @@ Vertex<T>::~Vertex()
 {
   delete m_data;
   m_adjacencyList.clear();
+}
+
+template <class T>
+bool Vertex<T>::IsConnectedTo(int id)
+{
+  for (int i = 0; i < m_adjacencyList.size(); i++)
+  {
+    if (m_adjacencyList[i].second->GetID() == id)
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 template <class T>
