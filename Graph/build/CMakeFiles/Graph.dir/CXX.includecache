@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/alex/Documents/CPE400/CPE400DynamicRouting/Graph/src/Graph.hpp
+iostream
+-
+fstream
+-
+map
+-
+Vertex.hpp
+/home/alex/Documents/CPE400/CPE400DynamicRouting/Graph/src/Vertex.hpp
+
+/home/alex/Documents/CPE400/CPE400DynamicRouting/Graph/src/Vertex.hpp
+iostream
+-
+fstream
+-
+deque
+-
+
+/home/alex/Documents/CPE400/CPE400DynamicRouting/Graph/src/main.cpp
+iostream
+-
+Graph.hpp
+/home/alex/Documents/CPE400/CPE400DynamicRouting/Graph/src/Graph.hpp
+
