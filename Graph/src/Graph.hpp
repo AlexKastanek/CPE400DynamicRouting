@@ -11,9 +11,6 @@ using namespace std;
 template <class T>
 class Graph
 {
-
-  //typedef map<int, Vertex<T>*> graph_map;
-
 public:
   //Constructor
   Graph();
@@ -54,6 +51,8 @@ void Graph<T>::AddVertex(int id)
 {
   typename map<int, Vertex<T>*>::iterator it = m_map.find(id);
 
+  //allocate memory for a new vertex and add it to the map if it does not
+  //already exist
   if (it == m_map.end())
   {
     Vertex<T>* vertex = new Vertex<T>(id);
@@ -70,6 +69,8 @@ void Graph<T>::AddVertex(int id, const T& data)
 {
   typename map<int, Vertex<T>*>::iterator it = m_map.find(id);
   
+  //allocate memory for a new vertex and add it to the map if it does not
+  //already exist
   if (it == m_map.end())
   {
     Vertex<T>* vertex = new Vertex<T>(id, data);
@@ -111,6 +112,7 @@ void Graph<T>::ConnectVertices(int from, int to, double cost)
   Vertex<T> *v = m_map.find(to)->second;
   pair<double, Vertex<T>*> edge = make_pair(cost, v);
 
+  //add the new edge to the from vertex's adjacency list
   u->m_adjacencyList.push_back(edge);
 }
 
@@ -122,6 +124,7 @@ void Graph<T>::DisconnectVertices(int from, int to)
 
   typename deque<typename Vertex<T>::vertex_edge>::iterator it;
 
+  //erase the matching edge from the from vertex's adjacency list
   for (it = u->m_adjacencyList.begin(); it != u->m_adjacencyList.end(); it++)
   {
     if (it->second->GetID() == v->GetID())
