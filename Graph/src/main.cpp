@@ -21,6 +21,8 @@ int main(void)
   graph->ConnectVertices(1, 2, 3);
   graph->ConnectVertices(2, 1, 3);
 
+  //graph->DisconnectVertices(1, 0);
+
   graph->Print();
 
   delete graph;

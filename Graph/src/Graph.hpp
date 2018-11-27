@@ -100,7 +100,19 @@ void Graph<T>::ConnectVertices(int from, int to, double cost)
 template <class T>
 void Graph<T>::DisconnectVertices(int from, int to)
 {
+  Vertex<T> *u = m_map.find(from)->second;
+  Vertex<T> *v = m_map.find(to)->second;
 
+  typename deque<typename Vertex<T>::vertex_edge>::iterator it;
+
+  for (it = u->m_adjacencyList.begin(); it != u->m_adjacencyList.end(); it++)
+  {
+    if (it->second->GetID() == v->GetID())
+    {
+      u->m_adjacencyList.erase(it);
+      return;
+    }
+  }
 }
 
 template <class T>

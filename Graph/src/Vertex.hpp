@@ -9,8 +9,8 @@ using namespace std;
 
 template <class T>
 class Vertex
-{
-
+{  
+public:
   /**
   * Name: vertex_edge
   * Description: A vertex edge. Made up of a double and a pointer to the
@@ -20,7 +20,6 @@ class Vertex
   */
   typedef pair<double, Vertex<T>*> vertex_edge;
 
-public:
   //Constructor
   Vertex(int id);
   Vertex(int id, const T& data);

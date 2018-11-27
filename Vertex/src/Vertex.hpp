@@ -7,19 +7,18 @@
 
 using namespace std;
 
+/**
+* Name: vertex_edge
+* Description: A vertex edge. Made up of a double and a pointer to the
+*   the other vertex. This will effectively hold the info of a connection
+*   between this vertex and the other vertex. The double stores the cost
+*   or weight info of this edge.
+*/
+typedef pair<double, Vertex<T>*> vertex_edge;
+
 template <class T>
 class Vertex
 {
-
-  /**
-  * Name: vertex_edge
-  * Description: A vertex edge. Made up of a double and a pointer to the
-  *   the other vertex. This will effectively hold the info of a connection
-  *   between this vertex and the other vertex. The double stores the cost
-  *   or weight info of this edge.
-  */
-  typedef pair<double, Vertex<T>*> vertex_edge;
-
 public:
   //Constructor
   Vertex(int id);
