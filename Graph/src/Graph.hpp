@@ -20,7 +20,9 @@ public:
   void AddVertex(int id);
   void AddVertex(int id, const T& data);
   void RemoveVertex(int id);
-  void ConnectVertices(int from, int to, double cost);
+  void ConnectVertices(int from, int to, 
+    unsigned int edgeType, 
+    const vector<double>& edgeCosts);
   void DisconnectVertices(int from, int to);
 
   void Clear();
@@ -106,11 +108,14 @@ void Graph<T>::RemoveVertex(int id)
 }
 
 template <class T>
-void Graph<T>::ConnectVertices(int from, int to, double cost)
+void Graph<T>::ConnectVertices(int from, int to, unsigned int edgeType, const vector<double>& edgeCosts)
 {
   Vertex<T> *u = m_map.find(from)->second;
   Vertex<T> *v = m_map.find(to)->second;
-  pair<double, Vertex<T>*> edge = make_pair(cost, v);
+
+  EdgeData edgeData(edgeType, edgeCosts);
+
+  pair<EdgeData, Vertex<T>*> edge = make_pair(edgeData, v);
 
   //add the new edge to the from vertex's adjacency list
   u->m_adjacencyList.push_back(edge);
@@ -122,7 +127,7 @@ void Graph<T>::DisconnectVertices(int from, int to)
   Vertex<T> *u = m_map.find(from)->second;
   Vertex<T> *v = m_map.find(to)->second;
 
-  typename deque<typename Vertex<T>::vertex_edge>::iterator it;
+  typename deque<typename Vertex<T>::Edge>::iterator it;
 
   //erase the matching edge from the from vertex's adjacency list
   for (it = u->m_adjacencyList.begin(); it != u->m_adjacencyList.end(); it++)
@@ -158,9 +163,17 @@ void Graph<T>::Print()
     Vertex<T>* vertex = it->second;
     for (int i = 0; i < vertex->m_adjacencyList.size(); i++)
     {
+      //add up each componenet of the vertex's edge cost
+      double totalEdgeCost = 0;
+      vector<double> edgeCosts = vertex->m_adjacencyList[i].first.costs;
+      for (int j = 0; j < edgeCosts.size(); j++)
+      {
+        totalEdgeCost += edgeCosts[j];
+      }
+
       cout << vertex->m_adjacencyList[i].second->GetID()
            << " with edge cost " 
-           << vertex->m_adjacencyList[i].first
+           << totalEdgeCost
            << endl;
     }
     cout << endl;

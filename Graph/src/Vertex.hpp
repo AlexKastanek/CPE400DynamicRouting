@@ -3,22 +3,43 @@
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include <deque>
 
 using namespace std;
 
+enum EdgeType
+{
+  WIRED_EDGE = 0,
+  WIRELESS_EDGE
+};
+
+struct EdgeData
+{
+  EdgeType type;
+  vector<double> costs;
+
+  EdgeData(unsigned int in_type, const vector<double>& in_costs)
+  {
+    type = static_cast<EdgeType>(in_type);
+    costs = in_costs;
+  };
+};
+
 template <class T>
 class Vertex
 {  
+
 public:
+
   /**
-  * Name: vertex_edge
-  * Description: A vertex edge. Made up of a double and a pointer to the
-  *   the other vertex. This will effectively hold the info of a connection
-  *   between this vertex and the other vertex. The double stores the cost
-  *   or weight info of this edge.
+  * Name: Edge
+  * Description: A vertex edge. Made up of an instance of EdgeData 
+  *   and a pointer to the other vertex. This will effectively hold 
+  *   the info of a connection between this vertex and the other vertex. 
+  *   The double stores the cost or weight info of this edge.
   */
-  typedef pair<double, Vertex<T>*> vertex_edge;
+  typedef pair<EdgeData, Vertex<T>*> Edge;
 
   //Constructor
   Vertex(int id);
@@ -33,11 +54,13 @@ public:
 
   void SetData(const T& data);
 
-  deque<vertex_edge> m_adjacencyList;
+  deque<Edge> m_adjacencyList;
 
 private:
+
   T* m_data;
   int m_id;
+
 };
 
 #endif /* VERTEX_H */

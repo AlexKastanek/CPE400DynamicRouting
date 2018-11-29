@@ -11,9 +11,21 @@ int main(void)
 {
   Graph<char>* graph = new Graph<char>();
 
-  cout << "Building Graph" << endl;
+  //cout << "Building Graph" << endl;
 
   /* currently this is building the graph in homework 4 */
+
+  //initialize single vectors with one value
+  vector<double> one(1, 1);
+  vector<double> two(1, 2);
+  vector<double> three(1, 3);
+  vector<double> four(1, 4);
+
+  //initialize edge data, one for each vector
+  EdgeData edgeOne(0, one);
+  EdgeData edgeTwo(0, two);
+  EdgeData edgeThree(0, three);
+  EdgeData edgeFour(0, four);
 
   graph->AddVertex(0, 'A');
   graph->AddVertex(1, 'B');
@@ -23,34 +35,34 @@ int main(void)
   graph->AddVertex(5, 'F');
 
   //from vertex A
-  graph->ConnectVertices(0, 1, 2);
-  graph->ConnectVertices(0, 3, 1);
+  graph->ConnectVertices(0, 1, 0, two);
+  graph->ConnectVertices(0, 3, 0, one);
 
   //from vertex B
-  graph->ConnectVertices(1, 0, 2);
-  graph->ConnectVertices(1, 2, 1);
-  graph->ConnectVertices(1, 3, 2);
-  graph->ConnectVertices(1, 4, 3);
+  graph->ConnectVertices(1, 0, 0, two);
+  graph->ConnectVertices(1, 2, 0, one);
+  graph->ConnectVertices(1, 3, 0, two);
+  graph->ConnectVertices(1, 4, 0, three);
 
   //from vertex C
-  graph->ConnectVertices(2, 1, 1);
-  graph->ConnectVertices(2, 4, 4);
-  graph->ConnectVertices(2, 5, 2);
+  graph->ConnectVertices(2, 1, 0, one);
+  graph->ConnectVertices(2, 4, 0, four);
+  graph->ConnectVertices(2, 5, 0, two);
 
   //from vertex D
-  graph->ConnectVertices(3, 0, 1);
-  graph->ConnectVertices(3, 1, 2);
-  graph->ConnectVertices(3, 4, 3);
+  graph->ConnectVertices(3, 0, 0, one);
+  graph->ConnectVertices(3, 1, 0, two);
+  graph->ConnectVertices(3, 4, 0, three);
 
   //from vertex E
-  graph->ConnectVertices(4, 1, 3);
-  graph->ConnectVertices(4, 2, 4);
-  graph->ConnectVertices(4, 3, 3);
-  graph->ConnectVertices(4, 5, 3);
+  graph->ConnectVertices(4, 1, 0, three);
+  graph->ConnectVertices(4, 2, 0, four);
+  graph->ConnectVertices(4, 3, 0, three);
+  graph->ConnectVertices(4, 5, 0, three);
 
   //from vertex F
-  graph->ConnectVertices(5, 2, 2);
-  graph->ConnectVertices(5, 4, 3);
+  graph->ConnectVertices(5, 2, 0, two);
+  graph->ConnectVertices(5, 4, 0, three);
 
   cout << "Graph Built" << endl;
   graph->Print();
