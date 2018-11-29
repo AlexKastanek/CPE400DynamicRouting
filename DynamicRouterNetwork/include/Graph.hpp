@@ -11,7 +11,9 @@ using namespace std;
 template <class T>
 class Graph
 {
+  
 public:
+
   //Constructor
   Graph();
   //Destructor
@@ -29,7 +31,8 @@ public:
 
   void Print();
 
-private:
+protected:
+
   map<int, Vertex<T>*> m_map;
 
 };

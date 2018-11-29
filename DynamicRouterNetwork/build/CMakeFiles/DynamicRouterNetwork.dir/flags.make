@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/alex/Documents/CPE400/CPE400DynamicRouting/Graph/include 
+CXX_INCLUDES = -I/home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/include 
 

@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/Graph.dir/src/main.cpp.o  -o Graph 
