@@ -57,9 +57,57 @@ include CMakeFiles/DynamicRouterNetwork.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/DynamicRouterNetwork.dir/flags.make
 
+CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o: CMakeFiles/DynamicRouterNetwork.dir/flags.make
+CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o: ../src/DynamicRouterNetwork.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o -c /home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/src/DynamicRouterNetwork.cpp
+
+CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/src/DynamicRouterNetwork.cpp > CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.i
+
+CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/src/DynamicRouterNetwork.cpp -o CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.s
+
+CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o.requires:
+
+.PHONY : CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o.requires
+
+CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o.provides: CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o.requires
+	$(MAKE) -f CMakeFiles/DynamicRouterNetwork.dir/build.make CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o.provides.build
+.PHONY : CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o.provides
+
+CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o.provides.build: CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o
+
+
+CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o: CMakeFiles/DynamicRouterNetwork.dir/flags.make
+CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o: ../src/Router.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o -c /home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/src/Router.cpp
+
+CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/src/Router.cpp > CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.i
+
+CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/src/Router.cpp -o CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.s
+
+CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o.requires:
+
+.PHONY : CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o.requires
+
+CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o.provides: CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o.requires
+	$(MAKE) -f CMakeFiles/DynamicRouterNetwork.dir/build.make CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o.provides.build
+.PHONY : CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o.provides
+
+CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o.provides.build: CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o
+
+
 CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o: CMakeFiles/DynamicRouterNetwork.dir/flags.make
 CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o -c /home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/src/main.cpp
 
 CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.i: cmake_force
@@ -83,15 +131,19 @@ CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o.provides.build: CMakeFiles/Dy
 
 # Object files for target DynamicRouterNetwork
 DynamicRouterNetwork_OBJECTS = \
+"CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o" \
+"CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o" \
 "CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o"
 
 # External object files for target DynamicRouterNetwork
 DynamicRouterNetwork_EXTERNAL_OBJECTS =
 
+DynamicRouterNetwork: CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o
+DynamicRouterNetwork: CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o
 DynamicRouterNetwork: CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o
 DynamicRouterNetwork: CMakeFiles/DynamicRouterNetwork.dir/build.make
 DynamicRouterNetwork: CMakeFiles/DynamicRouterNetwork.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable DynamicRouterNetwork"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable DynamicRouterNetwork"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/DynamicRouterNetwork.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -99,6 +151,8 @@ CMakeFiles/DynamicRouterNetwork.dir/build: DynamicRouterNetwork
 
 .PHONY : CMakeFiles/DynamicRouterNetwork.dir/build
 
+CMakeFiles/DynamicRouterNetwork.dir/requires: CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o.requires
+CMakeFiles/DynamicRouterNetwork.dir/requires: CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o.requires
 CMakeFiles/DynamicRouterNetwork.dir/requires: CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o.requires
 
 .PHONY : CMakeFiles/DynamicRouterNetwork.dir/requires

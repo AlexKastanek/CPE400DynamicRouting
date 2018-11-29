@@ -21,12 +21,6 @@ int main(void)
   vector<double> three(1, 3);
   vector<double> four(1, 4);
 
-  //initialize edge data, one for each vector
-  EdgeData edgeOne(0, one);
-  EdgeData edgeTwo(0, two);
-  EdgeData edgeThree(0, three);
-  EdgeData edgeFour(0, four);
-
   graph->AddVertex(0, 'A');
   graph->AddVertex(1, 'B');
   graph->AddVertex(2, 'C');

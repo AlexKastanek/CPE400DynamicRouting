@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o"
+  "CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o"
   "CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o"
   "DynamicRouterNetwork.pdb"
   "DynamicRouterNetwork"

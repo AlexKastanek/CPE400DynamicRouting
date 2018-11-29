@@ -123,6 +123,60 @@ DynamicRouterNetwork/fast:
 	$(MAKE) -f CMakeFiles/DynamicRouterNetwork.dir/build.make CMakeFiles/DynamicRouterNetwork.dir/build
 .PHONY : DynamicRouterNetwork/fast
 
+src/DynamicRouterNetwork.o: src/DynamicRouterNetwork.cpp.o
+
+.PHONY : src/DynamicRouterNetwork.o
+
+# target to build an object file
+src/DynamicRouterNetwork.cpp.o:
+	$(MAKE) -f CMakeFiles/DynamicRouterNetwork.dir/build.make CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o
+.PHONY : src/DynamicRouterNetwork.cpp.o
+
+src/DynamicRouterNetwork.i: src/DynamicRouterNetwork.cpp.i
+
+.PHONY : src/DynamicRouterNetwork.i
+
+# target to preprocess a source file
+src/DynamicRouterNetwork.cpp.i:
+	$(MAKE) -f CMakeFiles/DynamicRouterNetwork.dir/build.make CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.i
+.PHONY : src/DynamicRouterNetwork.cpp.i
+
+src/DynamicRouterNetwork.s: src/DynamicRouterNetwork.cpp.s
+
+.PHONY : src/DynamicRouterNetwork.s
+
+# target to generate assembly for a file
+src/DynamicRouterNetwork.cpp.s:
+	$(MAKE) -f CMakeFiles/DynamicRouterNetwork.dir/build.make CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.s
+.PHONY : src/DynamicRouterNetwork.cpp.s
+
+src/Router.o: src/Router.cpp.o
+
+.PHONY : src/Router.o
+
+# target to build an object file
+src/Router.cpp.o:
+	$(MAKE) -f CMakeFiles/DynamicRouterNetwork.dir/build.make CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o
+.PHONY : src/Router.cpp.o
+
+src/Router.i: src/Router.cpp.i
+
+.PHONY : src/Router.i
+
+# target to preprocess a source file
+src/Router.cpp.i:
+	$(MAKE) -f CMakeFiles/DynamicRouterNetwork.dir/build.make CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.i
+.PHONY : src/Router.cpp.i
+
+src/Router.s: src/Router.cpp.s
+
+.PHONY : src/Router.s
+
+# target to generate assembly for a file
+src/Router.cpp.s:
+	$(MAKE) -f CMakeFiles/DynamicRouterNetwork.dir/build.make CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.s
+.PHONY : src/Router.cpp.s
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -159,6 +213,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... DynamicRouterNetwork"
 	@echo "... edit_cache"
+	@echo "... src/DynamicRouterNetwork.o"
+	@echo "... src/DynamicRouterNetwork.i"
+	@echo "... src/DynamicRouterNetwork.s"
+	@echo "... src/Router.o"
+	@echo "... src/Router.i"
+	@echo "... src/Router.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

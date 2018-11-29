@@ -26,6 +26,6 @@ private:
   double m_nodalProcessingDelay;
   double m_queuingDelay;
 
-}
+};
 
 #endif /* ROUTER_H */
