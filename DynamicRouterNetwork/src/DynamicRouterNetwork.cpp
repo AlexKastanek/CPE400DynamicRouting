@@ -135,8 +135,45 @@ void DynamicRouterNetwork::Update()
   else
   {
     //add router
-    AddRouter(); //TODO: also connect router to network mesh
+    AddRouter();
     cout << "Client added to network" << endl;
+
+    /* connect router */
+
+    //generate number between 1 network size
+    //this is how many routers the new router is connected to
+    int connectionAmount = rand() % m_graph.GetMap().size() + 1;
+    cout << "Client connecting to " << connectionAmount << " routers..." << endl;
+
+    //generate which routers the new router is connected to
+    map<int, bool> connectedRouters;
+    for (int i = 0; i < connectionAmount; i++)
+    {
+      //generate a random router in the network
+      int connectedRouter = rand() % (m_graph.GetMap().size() + 1);
+
+      //check if this router is already connected to new router
+      map<int, bool>::iterator it = connectedRouters.find(connectedRouter);
+      if (it == connectedRouters.end())
+      {
+        //this router is not connected to the new one, connect it
+
+      }
+      else
+      {
+        //this router is already connected to the new one
+        //increment until a non connected router is discovered
+        while (it != connectedRouters.end())
+        {
+          int connectedRouterIndex = connectedRouter + 1;
+          connectedRouter = connectedRouterIndex % m_graph.GetMap().size();
+          map<int, bool>::iterator it = connectedRouters.find(connectedRouter);
+        }
+
+        //connect it
+
+      }
+    }
   }
 
   //change the router data
