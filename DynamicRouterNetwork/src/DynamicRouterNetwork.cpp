@@ -144,7 +144,59 @@ void DynamicRouterNetwork::RemoveRouter(int id)
 
 void DynamicRouterNetwork::ChangeRouters()
 {
+  //initialize random seed
+  srand(time(NULL));
 
+  double changeAmount = 0;
+
+  //loop through each node
+  typename map<int, Vertex<Router>*>::iterator it;
+  map<int, Vertex<Router>*> routerMap = m_graph.GetMap();
+  for (it = routerMap.begin(); it != routerMap.end(); it++)
+  {
+    //change nodal processing delay
+    changeAmount = ((double)(rand() % 100 + 1)) / 10000.0;
+    double nodalProcessingDelay = it->second->GetData().GetNodalProcessingDelay();
+    nodalProcessingDelay += changeAmount;
+
+    //change queuing delay
+    changeAmount = ((double)(rand() % 100 + 1)) / 10000.0;
+    double queuingDelay = it->second->GetData().GetQueuingDelay();
+    queuingDelay += changeAmount;
+
+    //set the new delays
+    Router newRouterData(nodalProcessingDelay, queuingDelay);
+    m_graph.SetVertexData(it->first, newRouterData);
+
+    //loop through each neighbor of the node
+    Vertex<Router>* vertex = it->second;
+    for (int i = 0; i < vertex->m_adjacencyList.size(); i++)
+    {
+      vector<double> edgeDelays;
+      Vertex<Router>* neighbor = vertex->m_adjacencyList[i].second;
+
+      //get the transmission and propagation delays
+      edgeDelays = vertex->m_adjacencyList[i].first.costs;
+      double transmissionDelay = edgeDelays[0];
+      double propagationDelay = edgeDelays[1];
+
+      //change transmission delay
+      changeAmount = ((double)(rand() % 100 + 1)) / 10000.0;
+      transmissionDelay += changeAmount;
+
+      //change propagation delay
+      changeAmount = ((double)(rand() % 100 + 1)) / 10000.0;
+      propagationDelay += changeAmount;
+
+      //set the new delays
+      edgeDelays[0] = transmissionDelay;
+      edgeDelays[1] = propagationDelay;
+      m_graph.SetVertexEdgeCosts(
+        it->first, 
+        neighbor->GetID(),
+        edgeDelays);
+    }
+  }
 }
 
 void DynamicRouterNetwork::GenerateEdgeCosts(vector<double>& edgeCosts)

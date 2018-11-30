@@ -10,7 +10,7 @@ CMakeFiles/DynamicRouterNetwork.dir/src/DynamicRouterNetwork.cpp.o: ../src/Dynam
 CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o: ../include/Router.h
 CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o: ../src/Router.cpp
 
+CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o: ../include/Graph.hpp
 CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o: ../include/Vertex.hpp
-CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o: ../src/Graph.hpp
 CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o: ../src/main.cpp
 

@@ -31,6 +31,11 @@ public:
 
   void Print();
 
+  map<int, Vertex<T>*>& GetMap();
+
+  void SetVertexData(int id, const T& data);
+  void SetVertexEdgeCosts(int from, int to, const vector<double>& edgeCosts);
+
 protected:
 
   map<int, Vertex<T>*> m_map;
@@ -181,4 +186,24 @@ void Graph<T>::Print()
     }
     cout << endl;
   }
+}
+
+template <class T>
+map<int, Vertex<T>*>& Graph<T>::GetMap()
+{
+  return m_map;
+}
+
+template <class T>
+void Graph<T>::SetVertexData(int id, const T& data)
+{
+  Vertex<T>* vertex = m_map.find(id)->second;
+  vertex->SetData(data);
+}
+
+template <class T>
+void Graph<T>::SetVertexEdgeCosts(int from, int to, const vector<double>& edgeCosts)
+{
+  Vertex<T>* vertex = m_map.find(from)->second;
+  vertex->SetEdgeCosts(to, edgeCosts);
 }
