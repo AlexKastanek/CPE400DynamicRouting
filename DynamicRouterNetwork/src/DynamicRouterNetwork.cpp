@@ -126,6 +126,7 @@ void DynamicRouterNetwork::Update()
   else
   {
     //add router
+    AddRouter();
   }
 
   //change the router data
@@ -134,7 +135,25 @@ void DynamicRouterNetwork::Update()
 
 void DynamicRouterNetwork::AddRouter()
 {
+  double nodalProcessingDelay = 0, queuingDelay = 0;
 
+  //initialize random seed
+  srand(time(NULL));
+
+  //generate random nodal processing delay (value between 0.001 and 0.05 seconds)
+  nodalProcessingDelay = ((double)(rand() % 50 + 1)) / 1000.0;
+  cout << "Generated nodal processing delay: " << nodalProcessingDelay << endl;
+
+  //generate random queuing delay (value between 0.001 and 0.05 seconds)
+  queuingDelay = ((double)(rand() % 50 + 1)) / 1000.0;
+  cout << "Generated queuing delay: " << queuingDelay << endl;
+
+  //create router
+  Router router(nodalProcessingDelay, queuingDelay);
+
+  //add router to network
+  m_graph.AddVertex(m_currentRouterIndex, router);
+  m_currentRouterIndex++;
 }
 
 void DynamicRouterNetwork::RemoveRouter(int id)
