@@ -106,7 +106,30 @@ void DynamicRouterNetwork::Initialize()
 
 void DynamicRouterNetwork::Update()
 {
+  //initialize random seed
+  srand(time(NULL));
 
+  /**
+  * generate random number to decide if adding a router, removing a router,
+  * or leaving the network alone. Currently doing 85% chance network is left
+  * alone, 10% chance a router is added, and 5% chance a router is removed
+  */
+  int randomNum = rand() % 100 + 1;
+  if (randomNum <= 85)
+  {
+    //do nothing
+  }
+  else if (randomNum > 95)
+  {
+    //remove router (randomly generate which router)
+  }
+  else
+  {
+    //add router
+  }
+
+  //change the router data
+  ChangeRouters();
 }
 
 void DynamicRouterNetwork::AddRouter()
@@ -126,7 +149,7 @@ void DynamicRouterNetwork::ChangeRouters()
 
 void DynamicRouterNetwork::GenerateEdgeCosts(vector<double>& edgeCosts)
 {
-  
+
 }
 
 /**
