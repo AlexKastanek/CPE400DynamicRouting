@@ -53,6 +53,6 @@ Router.h
 /home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/src/main.cpp
 iostream
 -
-Graph.hpp
-/home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/src/Graph.hpp
+DynamicRouterNetwork.h
+/home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/src/DynamicRouterNetwork.h
 

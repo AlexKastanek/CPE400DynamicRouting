@@ -11,6 +11,8 @@ CMakeFiles/DynamicRouterNetwork.dir/src/Router.cpp.o
  ../include/Router.h
  /home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/src/Router.cpp
 CMakeFiles/DynamicRouterNetwork.dir/src/main.cpp.o
+ ../include/DynamicRouterNetwork.h
  ../include/Graph.hpp
+ ../include/Router.h
  ../include/Vertex.hpp
  /home/alex/Documents/CPE400/CPE400DynamicRouting/DynamicRouterNetwork/src/main.cpp

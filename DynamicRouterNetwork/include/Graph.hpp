@@ -36,7 +36,7 @@ public:
   void SetVertexData(int id, const T& data);
   void SetVertexEdgeCosts(int from, int to, const vector<double>& edgeCosts);
 
-protected:
+private:
 
   map<int, Vertex<T>*> m_map;
 

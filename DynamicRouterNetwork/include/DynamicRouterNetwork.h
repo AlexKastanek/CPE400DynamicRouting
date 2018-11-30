@@ -26,6 +26,8 @@ public:
   void ChangeRouters();
   void GenerateEdgeCosts(vector<double>& edgeCosts);
 
+  void Print();
+
   vector<int>& BestPathDijsktra(int from, int to);
   vector<int>& BestPathBellmanFord(int from, int to);
 

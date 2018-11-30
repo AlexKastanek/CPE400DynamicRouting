@@ -3,18 +3,19 @@
 
 #include <iostream>
 
-#include "Graph.hpp"
+#include "DynamicRouterNetwork.h"
 
 using namespace std;
 
 int main(void)
 {
-  Graph<char>* graph = new Graph<char>();
+  //Graph<char>* graph = new Graph<char>();
 
   //cout << "Building Graph" << endl;
 
   /* currently this is building the graph in homework 4 */
 
+  /*
   //initialize single vectors with one value
   vector<double> one(1, 1);
   vector<double> two(1, 2);
@@ -70,8 +71,20 @@ int main(void)
 
   cout << "Graph Cleared" << endl;
   graph->Print();
+  */
 
-  delete graph;
+  //delete graph;
+
+  DynamicRouterNetwork drn;
+
+  drn.Initialize();
+
+  drn.Print();
+
+  cout << "UPDATE" << endl;
+  drn.Update();
+
+  drn.Print();
 
   return 0;
 }

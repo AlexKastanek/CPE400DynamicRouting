@@ -64,6 +64,9 @@ void DynamicRouterNetwork::Initialize()
 
   /* currently this is building a graph with same shape as the one in homework 4 */
 
+  //initialize random seed
+  srand(time(NULL));
+
   //add 6 routers
   for (int i = 0; i < 6; i++)
   {
@@ -78,6 +81,7 @@ void DynamicRouterNetwork::Initialize()
   m_graph.ConnectVertices(3, 0, 0, initialEdgeCosts);
   m_graph.ConnectVertices(1, 2, 0, initialEdgeCosts);
   m_graph.ConnectVertices(2, 1, 0, initialEdgeCosts);
+  initialEdgeCosts.clear();
 
   //edges in graph with cost 2
   GenerateEdgeCosts(initialEdgeCosts);
@@ -87,6 +91,7 @@ void DynamicRouterNetwork::Initialize()
   m_graph.ConnectVertices(3, 1, 0, initialEdgeCosts);
   m_graph.ConnectVertices(2, 5, 0, initialEdgeCosts);
   m_graph.ConnectVertices(5, 2, 0, initialEdgeCosts);
+  initialEdgeCosts.clear();
 
   //edges in graph with cost 3
   GenerateEdgeCosts(initialEdgeCosts);
@@ -96,11 +101,13 @@ void DynamicRouterNetwork::Initialize()
   m_graph.ConnectVertices(4, 3, 0, initialEdgeCosts);
   m_graph.ConnectVertices(4, 5, 0, initialEdgeCosts);
   m_graph.ConnectVertices(5, 4, 0, initialEdgeCosts);
+  initialEdgeCosts.clear();
 
   //edges in graph with cost 4
   GenerateEdgeCosts(initialEdgeCosts);
   m_graph.ConnectVertices(2, 4, 0, initialEdgeCosts);
   m_graph.ConnectVertices(4, 2, 0, initialEdgeCosts);
+  initialEdgeCosts.clear();
 
 }
 
@@ -118,15 +125,18 @@ void DynamicRouterNetwork::Update()
   if (randomNum <= 85)
   {
     //do nothing
+    cout << "Network state unchanged" << endl;
   }
   else if (randomNum > 95)
   {
     //remove router (randomly generate which router)
+    cout << "Client removed from network" << endl;
   }
   else
   {
     //add router
-    AddRouter();
+    AddRouter(); //TODO: also connect router to network mesh
+    cout << "Client added to network" << endl;
   }
 
   //change the router data
@@ -136,9 +146,6 @@ void DynamicRouterNetwork::Update()
 void DynamicRouterNetwork::AddRouter()
 {
   double nodalProcessingDelay = 0, queuingDelay = 0;
-
-  //initialize random seed
-  srand(time(NULL));
 
   //generate random nodal processing delay (value between 0.001 and 0.05 seconds)
   nodalProcessingDelay = ((double)(rand() % 50 + 1)) / 1000.0;
@@ -222,9 +229,6 @@ void DynamicRouterNetwork::GenerateEdgeCosts(vector<double>& edgeCosts)
 {
   double transmissionDelay = 0, propagationDelay = 0;
 
-  //initialize random seed
-  srand(time(NULL));
-
   //generate random transmission delay (value between 0.0001 and 0.05 seconds)
   transmissionDelay = ((double)(rand() % 500 + 1)) / 10000.0;
   cout << "Generated transmission delay: " << transmissionDelay << endl;
@@ -235,8 +239,13 @@ void DynamicRouterNetwork::GenerateEdgeCosts(vector<double>& edgeCosts)
   cout << "Generated propagation delay: " << propagationDelay << endl;
 
   //set the delays
-  edgeCosts[0] = transmissionDelay;
-  edgeCosts[1] = propagationDelay;
+  edgeCosts.push_back(transmissionDelay);
+  edgeCosts.push_back(propagationDelay);
+}
+
+void DynamicRouterNetwork::Print()
+{
+  m_graph.Print();
 }
 
 /**
