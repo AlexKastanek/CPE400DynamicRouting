@@ -2,7 +2,14 @@
 
 Router::Router()
 {
+  m_nodalProcessingDelay = 0;
+  m_queuingDelay = 0;
+}
 
+Router::Router(double nodalProcessingDelay, double queuingDelay)
+{
+  m_nodalProcessingDelay = nodalProcessingDelay;
+  m_queuingDelay = queuingDelay;
 }
 
 Router::~Router()

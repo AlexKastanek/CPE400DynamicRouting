@@ -12,6 +12,7 @@ public:
 
   //Constructor
   Router();
+  Router(double nodalProcessingDelay, double queuingDelay);
   //Destructor
   ~Router();
 

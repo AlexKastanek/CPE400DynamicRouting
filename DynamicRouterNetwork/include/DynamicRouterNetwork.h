@@ -21,6 +21,11 @@ public:
   void Initialize();
   void Update();
 
+  void AddRouter();
+  void RemoveRouter(int id);
+  void ChangeRouters();
+  void GenerateEdgeCosts(vector<double>& edgeCosts);
+
   vector<int>& BestPathDijsktra(int from, int to);
   vector<int>& BestPathBellmanFord(int from, int to);
 
