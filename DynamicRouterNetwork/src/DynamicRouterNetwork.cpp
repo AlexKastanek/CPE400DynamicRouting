@@ -201,7 +201,23 @@ void DynamicRouterNetwork::ChangeRouters()
 
 void DynamicRouterNetwork::GenerateEdgeCosts(vector<double>& edgeCosts)
 {
+  double transmissionDelay = 0, propagationDelay = 0;
 
+  //initialize random seed
+  srand(time(NULL));
+
+  //generate random transmission delay (value between 0.0001 and 0.05 seconds)
+  transmissionDelay = ((double)(rand() % 500 + 1)) / 10000.0;
+  cout << "Generated transmission delay: " << transmissionDelay << endl;
+
+  //generate random propagation delay (value between 0.000001 and 0.001)
+  //this value will be a lot larger for wireless links
+  propagationDelay = ((double)(rand() % 1000 + 1)) / 1000000.0;
+  cout << "Generated propagation delay: " << propagationDelay << endl;
+
+  //set the delays
+  edgeCosts[0] = transmissionDelay;
+  edgeCosts[1] = propagationDelay;
 }
 
 /**
