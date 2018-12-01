@@ -355,7 +355,7 @@ void DynamicRouterNetwork::Print()
 * from GetData(). And of course if you have any questions please ask me.
 */
 
-vector<int>& DynamicRouterNetwork::BestPathDijsktra(int from, int to)
+vector<int>* DynamicRouterNetwork::BestPathDijsktra(int from, int to)
 {
   int verticesRemaining = m_graph.GetMap().size();
   vector<bool> inSet (verticesRemaining, true); //true = node has not been visited yet, used to create a set of unvisted nodes
@@ -436,11 +436,11 @@ vector<int>& DynamicRouterNetwork::BestPathDijsktra(int from, int to)
   }
   while (localSource != from);
 
-  vector <int> path;
+  vector <int>* path = new vector<int>;
 
   while (!reversePath.empty())
   {
-    path.push_back (reversePath.top ());
+    path->push_back (reversePath.top ());
 
     reversePath.pop ();
 
@@ -448,9 +448,9 @@ vector<int>& DynamicRouterNetwork::BestPathDijsktra(int from, int to)
 
   //This can be removed, it is just debug output
   cout << "Best DJ path from " << from << " to " << to << " is { ";
-  for (int i = 0; i < path.size (); i++)
+  for (int i = 0; i < path->size (); i++)
   {
-    cout << path [i] << " ";
+    cout << path->at(i) << " ";
 
   }
   cout << "}" << endl;
@@ -459,7 +459,7 @@ vector<int>& DynamicRouterNetwork::BestPathDijsktra(int from, int to)
 
 }
 
-vector<int>& DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
+vector<int>* DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
 {
   int vertexCount = m_graph.GetMap().size();
   vector<double> distance (vertexCount, 99999.0); //Creates a set of shortest lengths to each node, 99999.0=inf
@@ -516,11 +516,11 @@ vector<int>& DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
   }
   while (localSource != from);
 
-  vector <int> path;
+  vector <int>* path = new vector<int>;
 
   while (!reversePath.empty())
   {
-    path.push_back (reversePath.top ());
+    path->push_back (reversePath.top ());
 
     reversePath.pop ();
 
@@ -528,9 +528,9 @@ vector<int>& DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
 
   //This can be removed, it is just debug output
   cout << "Best BF path from " << from << " to " << to << " is { ";
-  for (int i = 0; i < path.size (); i++)
+  for (int i = 0; i < path->size (); i++)
   {
-    cout << path [i] << " ";
+    cout << path->at(i) << " ";
 
   }
   cout << "}" << endl;

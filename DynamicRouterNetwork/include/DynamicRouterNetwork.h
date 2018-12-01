@@ -30,8 +30,8 @@ public:
 
   void Print();
 
-  vector<int>& BestPathDijsktra(int from, int to);
-  vector<int>& BestPathBellmanFord(int from, int to);
+  vector<int>* BestPathDijsktra(int from, int to);
+  vector<int>* BestPathBellmanFord(int from, int to);
 
 private:
 
