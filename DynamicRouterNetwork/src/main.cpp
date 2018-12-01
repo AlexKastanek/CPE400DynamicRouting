@@ -81,9 +81,17 @@ int main(void)
 
   drn.Print();
 
+  /*
+  while (true)
+  {
+    cout << "UPDATE" << endl;
+    drn.Update();
+    drn.Print();
+  }
+  */
+  
   cout << "UPDATE" << endl;
   drn.Update();
-
   drn.Print();
 
   return 0;

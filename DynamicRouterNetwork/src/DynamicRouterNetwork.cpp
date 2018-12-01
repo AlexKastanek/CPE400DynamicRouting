@@ -122,7 +122,7 @@ void DynamicRouterNetwork::Update()
   * alone, 10% chance a router is added, and 5% chance a router is removed
   */
   int randomNum = rand() % 100 + 1;
-  if (randomNum <= 10)
+  if (randomNum <= 85)
   {
     //do nothing
     cout << "Network state unchanged" << endl;
