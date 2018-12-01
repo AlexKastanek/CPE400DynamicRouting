@@ -21,6 +21,7 @@ public:
 
   void AddVertex(int id);
   void AddVertex(int id, const T& data);
+  Vertex<T>* GetVertexWithID (int id);
   void RemoveVertex(int id);
   void ConnectVertices(int from, int to, 
     unsigned int edgeType, 
@@ -91,6 +92,26 @@ void Graph<T>::AddVertex(int id, const T& data)
     cout << "Could not add vertex to graph. Vertex already exists" << endl;
   }
 }
+
+template <class T>
+Vertex<T>* Graph<T>::GetVertexWithID (int id)
+{
+  typename map<int, Vertex<T>*>::iterator it;
+
+  it = m_map.find (id);
+
+  if (it != m_map.end ())
+  {
+    return it->second;
+
+  } else
+  {
+    return NULL;
+
+  }
+
+}
+
 
 template <class T>
 void Graph<T>::RemoveVertex(int id)
