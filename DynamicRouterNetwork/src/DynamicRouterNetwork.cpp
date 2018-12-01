@@ -135,8 +135,85 @@ void DynamicRouterNetwork::Update()
   else
   {
     //add router
-    AddRouter(); //TODO: also connect router to network mesh
+    AddRouter();
     cout << "Client added to network" << endl;
+    cout << "New router index: " << m_currentRouterIndex << endl;
+
+    /* connect router */
+
+    //generate number between 1 network size
+    //this is how many routers the new router is connected to
+    int connectionAmount = rand() % m_graph.GetMap().size() + 1;
+    cout << "Client connecting to " << connectionAmount << " routers..." << endl;
+
+    //generate which routers the new router is connected to
+    map<int, bool> connectedRouters;
+    for (int i = 0; i < connectionAmount; i++)
+    {
+      //generate a random router in the network
+      int connectedRouter = rand() % (m_graph.GetMap().size() - 1);
+
+      //check if this router is already connected to new router
+      map<int, bool>::iterator it = connectedRouters.find(connectedRouter);
+      if (it == connectedRouters.end())
+      {
+        /*this router is not connected to the new one, connect it*/
+
+        //generate edge costs
+        vector<double> edgeCosts;
+        GenerateEdgeCosts(edgeCosts);
+
+        cout << "This router index: " << connectedRouter << endl;
+
+        //connection must be two way
+        m_graph.ConnectVertices(
+          m_currentRouterIndex,
+          connectedRouter,
+          0,
+          edgeCosts);
+        m_graph.ConnectVertices(
+          connectedRouter,
+          m_currentRouterIndex,
+          0,
+          edgeCosts);
+
+        //add this router to the connectedRouters
+        connectedRouters[connectedRouter] = true;
+      }
+      else
+      {
+        //this router is already connected to the new one
+        //increment until a non connected router is discovered
+        while (it == connectedRouters.end())
+        {
+          int connectedRouterIndex = connectedRouter + 1;
+          connectedRouter = connectedRouterIndex % m_graph.GetMap().size();
+          map<int, bool>::iterator it = connectedRouters.find(connectedRouter);
+        }
+
+        /* connect it */
+
+        //generate edge costs
+        vector<double> edgeCosts;
+        GenerateEdgeCosts(edgeCosts);
+
+        //connection must be two way
+        m_graph.ConnectVertices(
+          m_currentRouterIndex,
+          connectedRouter,
+          0,
+          edgeCosts);
+        m_graph.ConnectVertices(
+          connectedRouter,
+          m_currentRouterIndex,
+          0,
+          edgeCosts);
+
+        //add this router to the connectedRouters
+        connectedRouters[connectedRouter] = true;
+
+      }
+    }
   }
 
   //change the router data
@@ -159,8 +236,9 @@ void DynamicRouterNetwork::AddRouter()
   Router router(nodalProcessingDelay, queuingDelay);
 
   //add router to network
-  m_graph.AddVertex(m_currentRouterIndex, router);
   m_currentRouterIndex++;
+  m_graph.AddVertex(m_currentRouterIndex, router);
+  
 }
 
 void DynamicRouterNetwork::RemoveRouter(int id)
@@ -178,6 +256,7 @@ void DynamicRouterNetwork::ChangeRouters()
   //loop through each node
   typename map<int, Vertex<Router>*>::iterator it;
   map<int, Vertex<Router>*> routerMap = m_graph.GetMap();
+  map<int, bool> changedRouters;
   for (it = routerMap.begin(); it != routerMap.end(); it++)
   {
     //change nodal processing delay
@@ -198,30 +277,42 @@ void DynamicRouterNetwork::ChangeRouters()
     Vertex<Router>* vertex = it->second;
     for (int i = 0; i < vertex->m_adjacencyList.size(); i++)
     {
-      vector<double> edgeDelays;
-      Vertex<Router>* neighbor = vertex->m_adjacencyList[i].second;
+      //only changed the edge cost if this router hasn't already been changed
+      map<int, bool>::iterator itChanged = changedRouters.find(vertex->m_adjacencyList[i].second->GetID());
+      if (itChanged == changedRouters.end())
+      {
+        vector<double> edgeDelays;
+        Vertex<Router>* neighbor = vertex->m_adjacencyList[i].second;
 
-      //get the transmission and propagation delays
-      edgeDelays = vertex->m_adjacencyList[i].first.costs;
-      double transmissionDelay = edgeDelays[0];
-      double propagationDelay = edgeDelays[1];
+        //get the transmission and propagation delays
+        edgeDelays = vertex->m_adjacencyList[i].first.costs;
+        double transmissionDelay = edgeDelays[0];
+        double propagationDelay = edgeDelays[1];
 
-      //change transmission delay
-      changeAmount = ((double)(rand() % 100 + 1)) / 10000.0;
-      transmissionDelay += changeAmount;
+        //change transmission delay
+        changeAmount = ((double)(rand() % 100 + 1)) / 10000.0;
+        transmissionDelay += changeAmount;
 
-      //change propagation delay
-      changeAmount = ((double)(rand() % 100 + 1)) / 10000.0;
-      propagationDelay += changeAmount;
+        //change propagation delay
+        changeAmount = ((double)(rand() % 100 + 1)) / 10000.0;
+        propagationDelay += changeAmount;
 
-      //set the new delays
-      edgeDelays[0] = transmissionDelay;
-      edgeDelays[1] = propagationDelay;
-      m_graph.SetVertexEdgeCosts(
-        it->first, 
-        neighbor->GetID(),
-        edgeDelays);
+        //set the new delays
+        edgeDelays[0] = transmissionDelay;
+        edgeDelays[1] = propagationDelay;
+        m_graph.SetVertexEdgeCosts(
+          it->first, 
+          neighbor->GetID(),
+          edgeDelays);
+        m_graph.SetVertexEdgeCosts(
+          neighbor->GetID(), 
+          it->first,
+          edgeDelays);
+      }
     }
+
+    //add this router to the list of changed routers
+    changedRouters[it->first] = true;
   }
 }
 

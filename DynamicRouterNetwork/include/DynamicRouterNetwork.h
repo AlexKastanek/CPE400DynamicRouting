@@ -34,7 +34,7 @@ public:
 private:
 
   Graph<Router> m_graph;
-  int m_currentRouterIndex = 0;
+  int m_currentRouterIndex = -1;
 
 };
 
