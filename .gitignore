@@ -1,2 +1,5 @@
 DynamicRouterNetwork/[Bb]uilds/*
 DynamicRouterNetwork/[Bb]uild/*
+
+# For Bryce, VS Code generates settings files in the working directory
+.vscode/*
