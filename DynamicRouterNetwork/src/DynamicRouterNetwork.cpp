@@ -218,6 +218,10 @@ void DynamicRouterNetwork::Update()
 
   //change the router data
   ChangeRouters();
+
+  //This can be removed, it is just debug output
+  BestPathDijsktra (0, 5);
+
 }
 
 void DynamicRouterNetwork::AddRouter()
@@ -352,7 +356,106 @@ void DynamicRouterNetwork::Print()
 
 vector<int>& DynamicRouterNetwork::BestPathDijsktra(int from, int to)
 {
-  //yes
+  int verticesRemaining = m_graph.GetMap().size();
+  vector<bool> inSet (verticesRemaining, true); //true = node has not been visited yet, used to create a set of unvisted nodes
+  vector<double> distance (verticesRemaining, 99999.0); //Creates a set of shortest lengths to each node, 99999.0=inf
+  vector<int> previous (verticesRemaining, -1); //Keeps track of the previous node on the path to a given node. Ex. previous[3] = 5 means that 3 was reached through 5 on the shortest path
+
+  distance [from] = 0; //Source -> Source distance = 0
+
+  while (verticesRemaining > 0)
+  {
+    Vertex<Router>* nextVertex = NULL;
+    double shortestDistance = 99999.0;
+    int nextVertexIndex = -1;
+
+    //Find the next shortest distance node u
+    for (int i = 0; i < m_graph.GetMap().size(); i++)
+    {
+      if (distance [i] <= shortestDistance && inSet [i]) //If shortest distance and has not been visited yet
+      {
+        nextVertex = m_graph.GetVertexWithID (i);
+        shortestDistance = distance [i];
+        nextVertexIndex = i;
+
+      }
+    }
+
+    inSet [nextVertexIndex] = false; //Remove node u from the set
+
+    if (nextVertexIndex == to) //If we have found the destination we can terminate the search
+    {
+      break;
+
+    }
+
+    //Find shorter paths from this node
+    for (int i = 0; i < nextVertex->m_adjacencyList.size(); i++)
+    {
+      //add up each componenet of the vertex's edge cost
+      double alternatePathCost = 0;
+      vector<double> edgeCosts = nextVertex->m_adjacencyList[i].first.costs;
+      for (int j = 0; j < edgeCosts.size(); j++)
+      {
+        alternatePathCost += edgeCosts[j];
+      }
+
+      alternatePathCost += distance [nextVertexIndex];
+
+      int destinationIndex = nextVertex->m_adjacencyList[i].second->GetID(); //The index of node v
+
+      //If a shorter path was found from u -> v, where v has not been visted yet
+      if (alternatePathCost < distance [destinationIndex] && inSet [destinationIndex])
+      {
+        distance [destinationIndex] = alternatePathCost;
+        previous [destinationIndex] = nextVertexIndex;
+
+      }
+    }
+
+    verticesRemaining--;
+
+  }
+
+  stack <int> reversePath;
+
+  int localDestination = to;
+  int localSource = -1;
+
+  reversePath.push (localDestination);
+
+  do
+  {
+    localSource = previous [localDestination];
+
+    reversePath.push (localSource);
+
+    localDestination = localSource;
+
+  }
+  while (localSource != from);
+
+  vector <int> path;
+
+  while (!reversePath.empty())
+  {
+    path.push_back (reversePath.top ());
+
+    reversePath.pop ();
+
+  }
+
+  //This can be removed, it is just debug output
+  cout << "Best path from " << from << " to " << to << "is { ";
+  for (int i = 0; i < path.size (); i++)
+  {
+    cout << path [i] << " ";
+
+  }
+  cout << "}" << endl;
+
+  return path;
+
 }
 
 vector<int>& DynamicRouterNetwork::BestPathBellmanFord(int from, int to)

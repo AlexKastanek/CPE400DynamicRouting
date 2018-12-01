@@ -5,6 +5,8 @@
 #include "Router.h"
 #include <time.h>
 #include <math.h>
+#include <stack>
+#include <iostream>
 
 using namespace std;
 
