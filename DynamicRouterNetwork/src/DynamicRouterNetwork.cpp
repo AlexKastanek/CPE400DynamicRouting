@@ -221,6 +221,7 @@ void DynamicRouterNetwork::Update()
 
   //This can be removed, it is just debug output
   BestPathDijsktra (0, 5);
+  BestPathBellmanFord (0, 5);
 
 }
 
@@ -446,7 +447,7 @@ vector<int>& DynamicRouterNetwork::BestPathDijsktra(int from, int to)
   }
 
   //This can be removed, it is just debug output
-  cout << "Best path from " << from << " to " << to << "is { ";
+  cout << "Best DJ path from " << from << " to " << to << " is { ";
   for (int i = 0; i < path.size (); i++)
   {
     cout << path [i] << " ";
@@ -460,5 +461,80 @@ vector<int>& DynamicRouterNetwork::BestPathDijsktra(int from, int to)
 
 vector<int>& DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
 {
-  //my man
+  int vertexCount = m_graph.GetMap().size();
+  vector<double> distance (vertexCount, 99999.0); //Creates a set of shortest lengths to each node, 99999.0=inf
+  vector<int> previous (vertexCount, -1); //Keeps track of the previous node on the path to a given node. Ex. previous[3] = 5 means that 3 was reached through 5 on the shortest path
+
+  distance [from] = 0; //Set Source -> Source distance to 0
+
+  for (int i = 0; i < vertexCount - 1; i++) //BF runs vertexCount - 1 times
+  {
+    Vertex<Router>* nextVertex = m_graph.GetVertexWithID (i); //Node u
+
+    //For each edge (u,v)
+    for (int j = 0; j < nextVertex->m_adjacencyList.size(); j++)
+    {
+      int destinationIndex = nextVertex->m_adjacencyList[j].second->GetID();
+
+      //Calculate weight
+      double weight = 0;
+      vector<double> edgeCosts = nextVertex->m_adjacencyList[j].first.costs;
+      for (int j = 0; j < edgeCosts.size(); j++)
+      {
+        weight += edgeCosts[j];
+      }
+      
+      if (weight + distance [i] < distance [destinationIndex])
+      {
+        distance [destinationIndex] = weight + distance [i];
+        previous [destinationIndex] = i;
+
+      }
+
+    }
+
+
+  }
+
+  //Here checking for negative-weight cycles would be done, but since we are guarenteed to not have any it can be skipped
+
+  stack <int> reversePath;
+
+  int localDestination = to;
+  int localSource = -1;
+
+  reversePath.push (localDestination);
+
+  do
+  {
+    localSource = previous [localDestination];
+
+    reversePath.push (localSource);
+
+    localDestination = localSource;
+
+  }
+  while (localSource != from);
+
+  vector <int> path;
+
+  while (!reversePath.empty())
+  {
+    path.push_back (reversePath.top ());
+
+    reversePath.pop ();
+
+  }
+
+  //This can be removed, it is just debug output
+  cout << "Best BF path from " << from << " to " << to << " is { ";
+  for (int i = 0; i < path.size (); i++)
+  {
+    cout << path [i] << " ";
+
+  }
+  cout << "}" << endl;
+
+  return path;
+
 }
