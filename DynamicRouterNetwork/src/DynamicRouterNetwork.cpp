@@ -151,7 +151,7 @@ void DynamicRouterNetwork::Update()
     for (int i = 0; i < connectionAmount; i++)
     {
       //generate a random router in the network
-      int connectedRouter = rand() % (m_graph.GetMap().size() - 1);
+      int connectedRouter = rand() % (m_graph.GetMap().size() - 2);
 
       cout << "Generated router index: " << connectedRouter << endl;
 
@@ -473,7 +473,7 @@ vector<int>* DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
 
   distance [from] = 0; //Set Source -> Source distance to 0
 
-  for (int i = 0; i < vertexCount - 1; i++) //BF runs vertexCount - 1 times
+  for (int i = 0; i < vertexCount; i++) //BF runs vertexCount times
   {
     Vertex<Router>* nextVertex = m_graph.GetVertexWithID (i); //Node u
 
