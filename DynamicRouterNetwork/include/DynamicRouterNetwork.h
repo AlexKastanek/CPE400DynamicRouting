@@ -28,6 +28,8 @@ public:
   void ChangeRouters();
   void GenerateEdgeCosts(vector<double>& edgeCosts);
 
+  bool VertexExists(int id);
+
   void Print();
 
   vector<int>* BestPathDijsktra(int from, int to);
