@@ -130,11 +130,20 @@ void DynamicRouterNetwork::Update()
   else if (randomNum > 80)
   {
     //remove router (randomly generate which router)
+    cout << "Removing client from network" << endl;
 
     //TODO: uncomment when best path algorithms work
-    //int routerIndex = rand() % (m_graph.GetMap().size() - 1);
-    //RemoveRouter(routerIndex);
-    cout << "Client removed from network" << endl;
+    int routerOffset = rand() % (m_graph.GetMap().size() - 1) + 1;
+    cout << routerOffset << endl;
+    int routerID;
+    typename map<int, Vertex<Router>*>::iterator it = m_graph.GetMap().begin();
+    for (int i = 0; i < routerOffset; i++)
+    {
+      it++;
+    }
+    routerID = it->first;
+    RemoveRouter(routerID);
+    
   }
   else
   {
@@ -145,9 +154,18 @@ void DynamicRouterNetwork::Update()
 
     /* connect router */
 
-    //generate number between 1 network size
+    //generate number between 1 and 5
     //this is how many routers the new router is connected to
-    int connectionAmount = rand() % (m_graph.GetMap().size() - 1) + 1;
+    int connectionAmount;
+    if (m_graph.GetMap().size() > 5)
+    {
+      connectionAmount = rand() % 5 + 1;
+    }
+    else
+    {
+      connectionAmount = rand() % (m_graph.GetMap().size() - 1) + 1;
+    }
+    
     cout << "Client connecting to " << connectionAmount << " routers..." << endl;
 
     //generate which routers the new router is connected to
@@ -219,7 +237,7 @@ void DynamicRouterNetwork::Update()
           connectedRouter = routerIt->first;
 
           it = connectedRouters.find(connectedRouter);
-          cout << connectedRouter << endl;
+          //cout << connectedRouter << endl;
         }
 
         /* connect it */
@@ -253,10 +271,6 @@ void DynamicRouterNetwork::Update()
   ChangeRouters();
   cout << "Router data updated" << endl;
 
-  //This can be removed, it is just debug output
-  BestPathDijsktra (0, 5);
-  BestPathBellmanFord (0, 5);
-
 }
 
 void DynamicRouterNetwork::AddRouter()
@@ -282,6 +296,12 @@ void DynamicRouterNetwork::AddRouter()
 
 void DynamicRouterNetwork::RemoveRouter(int id)
 {
+  if (m_graph.GetMap().size() <= 2)
+  {
+    cout << "Network is size two and network must contain at least two vertices. Cannot remove router." << endl;
+    return;
+  }
+
   cout << "Removing router " << id << endl;
   m_graph.RemoveVertex(id);
 }
@@ -408,13 +428,18 @@ void DynamicRouterNetwork::Print()
 vector<int>* DynamicRouterNetwork::BestPathDijsktra(int from, int to)
 {
   int verticesRemaining = m_graph.GetMap().size();
+  map<int, bool> inSet; //used to create a set of unvisted nodes
+  map<int, double> distance; //creates a set of shortest lengths to each node
+  map<int, int> previous; //keeps track of the previous node on the path to a given node. Ex. previous[3] = 5 means that 3 was reached through 5 on the shortest path
 
-  //TODO: turn these vectors into maps so they can be accessed
-  //  by vertex ID which won't always be of range 0 to graph size
-
-  vector<bool> inSet (verticesRemaining, true); //true = node has not been visited yet, used to create a set of unvisted nodes
-  vector<double> distance (verticesRemaining, 99999.0); //Creates a set of shortest lengths to each node, 99999.0=inf
-  vector<int> previous (verticesRemaining, -1); //Keeps track of the previous node on the path to a given node. Ex. previous[3] = 5 means that 3 was reached through 5 on the shortest path
+  //initialize maps
+  typename map<int, Vertex<Router>*>::iterator it;
+  for (it = m_graph.GetMap().begin(); it != m_graph.GetMap().end(); it++)
+  {
+    inSet[it->first] = true; //true = node has not been visited yet, 
+    distance[it->first] = 99999.0; //99999.0=inf
+    previous[it->first] = -1;
+  }
 
   distance [from] = 0; //Source -> Source distance = 0
 
@@ -425,14 +450,13 @@ vector<int>* DynamicRouterNetwork::BestPathDijsktra(int from, int to)
     int nextVertexIndex = -1;
 
     //Find the next shortest distance node u
-    for (int i = 0; i < m_graph.GetMap().size(); i++)
+    for (it = m_graph.GetMap().begin(); it != m_graph.GetMap().end(); it++)
     {
-      if (distance [i] <= shortestDistance && inSet [i]) //If shortest distance and has not been visited yet
+      if (distance[it->first] <= shortestDistance && inSet[it->first]) //If shortest distance and has not been visited yet
       {
-        nextVertex = m_graph.GetVertexWithID (i);
-        shortestDistance = distance [i];
-        nextVertexIndex = i;
-
+        nextVertex = it->second;
+        shortestDistance = distance[it->first];
+        nextVertexIndex = it->first;
       }
     }
 
@@ -441,7 +465,6 @@ vector<int>* DynamicRouterNetwork::BestPathDijsktra(int from, int to)
     if (nextVertexIndex == to) //If we have found the destination we can terminate the search
     {
       break;
-
     }
 
     //Find shorter paths from this node
@@ -450,11 +473,11 @@ vector<int>* DynamicRouterNetwork::BestPathDijsktra(int from, int to)
       //add up each componenet of the vertex's edge cost
       double alternatePathCost = 0;
       vector<double> edgeCosts = nextVertex->m_adjacencyList[i].first.costs;
-      for (int j = 0; j < edgeCosts.size(); j++)
-      {
-        alternatePathCost += edgeCosts[j];
-      }
+      alternatePathCost = edgeCosts[0] + edgeCosts[1] +
+        nextVertex->m_adjacencyList[i].second->GetData().GetNodalProcessingDelay() +
+        nextVertex->m_adjacencyList[i].second->GetData().GetQueuingDelay();
 
+      //add path so far
       alternatePathCost += distance [nextVertexIndex];
 
       int destinationIndex = nextVertex->m_adjacencyList[i].second->GetID(); //The index of node v
@@ -464,12 +487,10 @@ vector<int>* DynamicRouterNetwork::BestPathDijsktra(int from, int to)
       {
         distance [destinationIndex] = alternatePathCost;
         previous [destinationIndex] = nextVertexIndex;
-
       }
     }
 
     verticesRemaining--;
-
   }
 
   stack <int> reversePath;
@@ -495,9 +516,7 @@ vector<int>* DynamicRouterNetwork::BestPathDijsktra(int from, int to)
   while (!reversePath.empty())
   {
     path->push_back (reversePath.top ());
-
     reversePath.pop ();
-
   }
 
   //This can be removed, it is just debug output
@@ -520,11 +539,24 @@ vector<int>* DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
   //TODO: turn these vectors into maps so they can be accessed
   //  by vertex ID which won't always be of range 0 to graph size
 
-  vector<double> distance (vertexCount, 99999.0); //Creates a set of shortest lengths to each node, 99999.0=inf
-  vector<int> previous (vertexCount, -1); //Keeps track of the previous node on the path to a given node. Ex. previous[3] = 5 means that 3 was reached through 5 on the shortest path
+  //vector<double> distance (vertexCount, 99999.0); //Creates a set of shortest lengths to each node, 99999.0=inf
+  //vector<int> previous (vertexCount, -1); //Keeps track of the previous node on the path to a given node. Ex. previous[3] = 5 means that 3 was reached through 5 on the shortest path
+
+  map<int, double> distance; //creates a set of shortest lengths to each node
+  map<int, int> previous; //keeps track of the previous node on the path to a given node. Ex. previous[3] = 5 means that 3 was reached through 5 on the shortest path
+
+  //initialize maps
+  typename map<int, Vertex<Router>*>::iterator it;
+  for (it = m_graph.GetMap().begin(); it != m_graph.GetMap().end(); it++)
+  {
+    distance[it->first] = 99999.0; //99999.0=inf
+    previous[it->first] = -1;
+  }
 
   distance [from] = 0; //Set Source -> Source distance to 0
 
+  //TODO make this compatible with maps
+  /*
   for (int i = 0; i < vertexCount; i++) //BF runs vertexCount times
   {
     Vertex<Router>* nextVertex = m_graph.GetVertexWithID (i); //Node u
@@ -553,6 +585,7 @@ vector<int>* DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
 
 
   }
+  */
 
   //Here checking for negative-weight cycles would be done, but since we are guarenteed to not have any it can be skipped
 
