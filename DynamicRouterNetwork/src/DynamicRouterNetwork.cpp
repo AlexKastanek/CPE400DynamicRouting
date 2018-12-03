@@ -151,8 +151,14 @@ void DynamicRouterNetwork::Update()
     for (int i = 0; i < connectionAmount; i++)
     {
       //generate a random router in the network
-      int connectedRouter = rand() % (m_graph.GetMap().size() - 2);
-
+      int routerOffset = rand() % (m_graph.GetMap().size() - 2);
+      typename map<int, Vertex<Router>*>::iterator routerIt = m_graph.GetMap().begin();
+      int connectedRouter;
+      for (int j = 0; j < routerOffset; j++)
+      {
+        routerIt++;
+      }
+      connectedRouter = routerIt->first;
       cout << "Generated router index: " << connectedRouter << endl;
 
       //check if this router is already connected to new router
@@ -188,11 +194,25 @@ void DynamicRouterNetwork::Update()
         //increment until a non connected router is discovered
         while (it != connectedRouters.end())
         {
-          int connectedRouterIndex = connectedRouter + 1;
-          connectedRouter = connectedRouterIndex % m_graph.GetMap().size();
+          int connectedRouterIndex = connectedRouter;
+          typename map<int, Vertex<Router>*>::iterator routerIt = m_graph.GetMap().find(connectedRouterIndex);
+
+          typename map<int, Vertex<Router>*>::iterator loopPoint = m_graph.GetMap().end();
+          loopPoint--;
+          loopPoint--;
+
+          if (routerIt == loopPoint)
+          {
+            routerIt = m_graph.GetMap().begin();
+          }
+          else
+          {
+            routerIt++;
+          }
+          //connectedRouter = connectedRouterIndex % m_graph.GetMap().size();
+          connectedRouter = routerIt->first;
           it = connectedRouters.find(connectedRouter);
           cout << connectedRouter << endl;
-          for (int j = 0; j < 1000000; j++) {};
         }
 
         /* connect it */
