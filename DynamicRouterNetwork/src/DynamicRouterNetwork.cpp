@@ -118,16 +118,16 @@ void DynamicRouterNetwork::Update()
 
   /**
   * generate random number to decide if adding a router, removing a router,
-  * or leaving the network alone. Currently doing 85% chance network is left
-  * alone, 10% chance a router is added, and 5% chance a router is removed
+  * or leaving the network alone. Currently doing 50% chance network is left
+  * alone, 30% chance a router is added, and 20% chance a router is removed
   */
   int randomNum = rand() % 100 + 1;
-  if (randomNum <= 85)
+  if (randomNum <= 50)
   {
     //do nothing
     cout << "Network state unchanged" << endl;
   }
-  else if (randomNum > 95)
+  else if (randomNum > 80)
   {
     //remove router (randomly generate which router)
     cout << "Client removed from network" << endl;
@@ -143,7 +143,7 @@ void DynamicRouterNetwork::Update()
 
     //generate number between 1 network size
     //this is how many routers the new router is connected to
-    int connectionAmount = rand() % m_graph.GetMap().size() + 1;
+    int connectionAmount = rand() % (m_graph.GetMap().size() - 1) + 1;
     cout << "Client connecting to " << connectionAmount << " routers..." << endl;
 
     //generate which routers the new router is connected to
@@ -152,6 +152,8 @@ void DynamicRouterNetwork::Update()
     {
       //generate a random router in the network
       int connectedRouter = rand() % (m_graph.GetMap().size() - 1);
+
+      cout << "Generated router index: " << connectedRouter << endl;
 
       //check if this router is already connected to new router
       map<int, bool>::iterator it = connectedRouters.find(connectedRouter);
@@ -163,7 +165,7 @@ void DynamicRouterNetwork::Update()
         vector<double> edgeCosts;
         GenerateEdgeCosts(edgeCosts);
 
-        cout << "This router index: " << connectedRouter << endl;
+        cout << "Adding router index: " << connectedRouter << endl;
 
         //connection must be two way
         m_graph.ConnectVertices(
@@ -184,11 +186,13 @@ void DynamicRouterNetwork::Update()
       {
         //this router is already connected to the new one
         //increment until a non connected router is discovered
-        while (it == connectedRouters.end())
+        while (it != connectedRouters.end())
         {
           int connectedRouterIndex = connectedRouter + 1;
           connectedRouter = connectedRouterIndex % m_graph.GetMap().size();
-          map<int, bool>::iterator it = connectedRouters.find(connectedRouter);
+          it = connectedRouters.find(connectedRouter);
+          cout << connectedRouter << endl;
+          for (int j = 0; j < 1000000; j++) {};
         }
 
         /* connect it */
@@ -196,6 +200,8 @@ void DynamicRouterNetwork::Update()
         //generate edge costs
         vector<double> edgeCosts;
         GenerateEdgeCosts(edgeCosts);
+
+        cout << "Adding router index: " << connectedRouter << endl;
 
         //connection must be two way
         m_graph.ConnectVertices(
