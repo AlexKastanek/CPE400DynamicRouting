@@ -27,7 +27,7 @@ int main(void)
 
   bool running = true;
   int from, to;
-  bool validEntry;
+  bool validEntry, validPath;
   vector<int> *bestPath;
 
   while (running)
@@ -51,20 +51,30 @@ int main(void)
         drn.Print();
         break;
       case 3:
-        validEntry = false;
-        while (!validEntry)
+        validPath = false;
+        while (!validPath)
         {
-          cout << "Please enter the ID of the source router: ";
-          cin >> from;
-          validEntry = drn.VertexExists(from);
-        }
+          validEntry = false;
+          while (!validEntry)
+          {
+            cout << "Please enter the ID of the source router: ";
+            cin >> from;
+            validEntry = drn.VertexExists(from);
+          }
 
-        validEntry = false;
-        while (!validEntry)
-        {
-          cout << "Please enter the ID of the destination router: ";
-          cin >> to;
-          validEntry = drn.VertexExists(to);
+          validEntry = false;
+          while (!validEntry)
+          {
+            cout << "Please enter the ID of the destination router: ";
+           cin >> to;
+            validEntry = drn.VertexExists(to);
+          }
+
+          validPath = drn.PathExists(from, to);
+          if (!validPath)
+          {
+            cout << "Invalid path. Please enter a connected source and destination router" << endl;
+          }
         }
 
         bestPath = new vector<int>;
@@ -80,20 +90,30 @@ int main(void)
         delete bestPath;
         break;
       case 4:
-        validEntry = false;
-        while (!validEntry)
+        validPath = false;
+        while (!validPath)
         {
-          cout << "Please enter the ID of the source router: ";
-          cin >> from;
-          validEntry = drn.VertexExists(from);
-        }
+          validEntry = false;
+          while (!validEntry)
+          {
+            cout << "Please enter the ID of the source router: ";
+            cin >> from;
+            validEntry = drn.VertexExists(from);
+          }
 
-        validEntry = false;
-        while (!validEntry)
-        {
-          cout << "Please enter the ID of the destination router: ";
-          cin >> to;
-          validEntry = drn.VertexExists(to);
+          validEntry = false;
+          while (!validEntry)
+          {
+            cout << "Please enter the ID of the destination router: ";
+           cin >> to;
+            validEntry = drn.VertexExists(to);
+          }
+
+          validPath = drn.PathExists(from, to);
+          if (!validPath)
+          {
+            cout << "Invalid path. Please enter a connected source and destination router" << endl;
+          }
         }
 
         bestPath = new vector<int>;

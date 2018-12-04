@@ -29,6 +29,7 @@ public:
   void GenerateEdgeCosts(vector<double>& edgeCosts);
 
   bool VertexExists(int id);
+  bool PathExists(int from, int to);
 
   void Print();
 

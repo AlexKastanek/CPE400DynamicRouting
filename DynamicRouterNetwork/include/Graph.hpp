@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <queue>
 #include <map>
 #include "Vertex.hpp"
 
@@ -27,6 +28,8 @@ public:
     unsigned int edgeType, 
     const vector<double>& edgeCosts);
   void DisconnectVertices(int from, int to);
+
+  bool BFS(int from, int to);
 
   void Clear();
 
@@ -167,6 +170,49 @@ void Graph<T>::DisconnectVertices(int from, int to)
       return;
     }
   }
+}
+
+template <class T>
+bool Graph<T>::BFS(int from, int to)
+{
+  typename map<int, Vertex<T>*>::iterator it;
+
+  map<int, bool> visited;
+  queue<int> q;
+
+  //mark all vertices as not visited
+  for (it = m_map.begin(); it != m_map.end(); it++)
+  {
+    visited[it->first] = false;
+  }
+
+  //mark from vertex as visited and enqueue
+  visited[from] = true;
+  q.push(from);
+
+  int currentVertexID;
+  while (!q.empty())
+  {
+    //dequeue current vertex
+    currentVertexID = q.front();
+    //cout << currentVertexID << endl;
+    q.pop();
+
+    //get all adjacent vertices to current vertex
+    //If adjacent vertex has not been visited, enqueue it
+    Vertex<T> *currentVertex = GetVertexWithID(currentVertexID);
+    for (int i = 0; i < currentVertex->m_adjacencyList.size(); i++)
+    {
+      int neighborID = currentVertex->m_adjacencyList[i].second->GetID();
+      if (!visited[neighborID])
+      {
+        visited[neighborID] = true;
+        q.push(neighborID);
+      }
+    }
+  }
+
+  return visited[to];
 }
 
 template <class T>

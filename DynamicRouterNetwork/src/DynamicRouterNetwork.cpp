@@ -109,6 +109,10 @@ void DynamicRouterNetwork::Initialize()
   m_graph.ConnectVertices(4, 2, 0, initialEdgeCosts);
   initialEdgeCosts.clear();
 
+
+  //Testing disconnected graph
+  AddRouter();
+
 }
 
 void DynamicRouterNetwork::Update()
@@ -407,6 +411,11 @@ bool DynamicRouterNetwork::VertexExists(int id)
   {
     return false;
   }
+}
+
+bool DynamicRouterNetwork::PathExists(int from, int to)
+{
+  return m_graph.BFS(from, to);
 }
 
 void DynamicRouterNetwork::Print()
