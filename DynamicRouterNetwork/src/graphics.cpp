@@ -153,6 +153,9 @@ bool Graphics::Initialize(int width, int height) {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
+	//initialize Dynamic router network
+	drn.Initialize();
+
 	return true;
 }
 
@@ -166,9 +169,31 @@ void Graphics::RenderObjects(Shader *shader) {
 	glUniformMatrix4fv(shader->GetUniformLocation("projectionMatrix"), 1, GL_FALSE,
 			glm::value_ptr(m_camera->GetProjection()));
 
-	// Render the scene
+	//read graph state and render routers
+
+	RenderRouter(shader, glm::vec3(0,0,0));
+	RenderRouter(shader, glm::vec3(1,0,1));
+}
+
+void Graphics::RenderAllConnections(Shader *shader) {
+	RenderConnection(glm::vec3(0,0,0), glm::vec3(1,1,1));
+}
+void Graphics::RenderConnection(glm::vec3 from, glm::vec3 to) {
+	//glBegin(GL_LINES);
+	//    glVertex3f(from.x, from.y, from.z);
+	//    glVertex3f(to.x, to.y, to.z);
+	//glEnd();
+}
+
+/**
+ * Renders a single router using the default mesh
+ */
+void Graphics::RenderRouter(Shader *shader , glm::vec3 position) {
+	glm::mat4 newPos = glm::translate(position) * m_cube->GetModel();
+
+	// Render the object
 	glUniformMatrix4fv(shader->GetUniformLocation("modelMatrix"), 1, GL_FALSE,
-			glm::value_ptr(m_cube->GetModel()));
+			glm::value_ptr(newPos));
 	m_cube->Render();
 }
 
@@ -199,6 +224,7 @@ void Graphics::Render() {
 	glUniformMatrix4fv(m_shader->GetUniformLocation("lightMatrix"), 1, GL_FALSE,
 			glm::value_ptr(lightMatrix));
 	RenderObjects(m_shader);
+	RenderAllConnections(m_shader);
 
 	//use the original screen frame buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

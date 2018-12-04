@@ -41,8 +41,8 @@ void Object::Update(unsigned int dt) {
 	orbit -= dt * M_PI / (500 * orbitSpeed);
 	xPos = glm::sin(orbit);
 	yPos = glm::cos(orbit);
-	model = glm::translate(glm::mat4(1.0f),
-			glm::vec3(xPos * distance, 0.0, yPos * distance));
+	model = glm::scale(glm::mat4(1.0f),
+			glm::vec3(0.5));
 
 	//original rotate code modified to take initial translated matrix
 	angle += dt * M_PI / (500 * rotationSpeed);

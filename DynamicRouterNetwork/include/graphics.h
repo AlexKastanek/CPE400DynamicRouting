@@ -9,6 +9,7 @@ using namespace std;
 #include "shader.h"
 #include "object.h"
 #include "frameBuffer.h"
+#include "DynamicRouterNetwork.h"
 
 class Graphics
 {
@@ -19,9 +20,14 @@ class Graphics
     void Update(unsigned int dt);
     void Render();
     void RenderObjects(Shader*);
+    void RenderRouter(Shader* , glm::vec3);
+    void RenderAllConnections(Shader*);
+    void RenderConnection(glm::vec3 from, glm::vec3 to);
 
   private:
     std::string ErrorString(GLenum error);
+
+	DynamicRouterNetwork drn;
 
     Camera *m_camera;
     Shader *m_shader;
