@@ -114,16 +114,12 @@ void Graphics::Update(unsigned int dt) {
 }
 
 void Graphics::RenderObjects(Shader *shader) {
-
 	//read graph state and render routers
 	Graph<Router> graph = drn.GetGraph();
 	int size = graph.GetMap().size();
-	float radius = 2;
-	int i = 0;
 	for (int i = 0; i < size; i++) {
 		//put in a circle based on router count
-		double angle = glm::radians((360.0/size)*i);
-		RenderRouter(shader, glm::vec3(glm::cos(angle)*radius,0,glm::sin(angle)*radius));
+		RenderRouter(shader, RouterPosition(i, size));
 	}
 }
 
@@ -139,7 +135,17 @@ void Graphics::RenderAllConnections(Shader *shader) {
 	glUniformMatrix4fv(shader->GetUniformLocation("modelMatrix"), 1, GL_FALSE,
 			glm::value_ptr(glm::mat4(1.0)));
 
-	RenderConnection(glm::vec3(0,0,0), glm::vec3(3,0,0));
+	//read graph state and render routers
+	Graph<Router> graph = drn.GetGraph();
+	int size = graph.GetMap().size();
+	for (int i = 0; i < size; i++) {
+		auto vertex = graph.GetVertexWithID(i);
+		for (int j = 0; j < size; j++) {
+			if (vertex->IsConnectedTo(j)) {
+				RenderConnection(RouterPosition(i, size), RouterPosition(j, size));
+			}
+		}
+	}
 }
 void Graphics::RenderConnection(glm::vec3 from, glm::vec3 to) {
 	float link[] = {from.x, from.y, from.z, to.x, to.y, to.z};
@@ -151,6 +157,12 @@ void Graphics::RenderConnection(glm::vec3 from, glm::vec3 to) {
 	glLineWidth(5.0);
 	glDrawArrays(GL_LINES, 0, 6);
 	glDisableVertexAttribArray(0);
+}
+
+glm::vec3 Graphics::RouterPosition(int routerNum, int routerCount) {
+	float radius = 2;
+	double angle = glm::radians((360.0/routerCount)*routerNum);
+	return glm::vec3(glm::cos(angle)*radius,0,glm::sin(angle)*radius);
 }
 
 /**
