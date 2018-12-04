@@ -147,7 +147,8 @@ void Graphics::RenderAllConnections(Shader *shader) {
 		if (vertex != NULL) {
 			for (int j = 0; j < size; j++) {
 				if (vertex->IsConnectedTo(j)) {
-					glm::vec2 color = glm::vec2(vertex->GetEdgeCost(j)*30,0);
+					cout << vertex->GetEdgeCost(j) << endl;
+					glm::vec2 color = glm::vec2((vertex->GetEdgeCost(j)-1.5)*1.9, 0.0);
 					glUniform2fv(shader->GetUniformLocation("lineColor"), 1,
 							glm::value_ptr(color));
 					RenderConnection(RouterPosition(i, size), RouterPosition(j, size));
