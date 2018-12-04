@@ -5,6 +5,7 @@ layout (location = 1) in vec3 v_color;
 smooth out vec3 color; 
 out vec3 fragPos;
 out vec4 lightSpaceFragPos;
+out vec3 lightPos;
           
 uniform mat4 projectionMatrix; 
 uniform mat4 viewMatrix;
@@ -18,5 +19,6 @@ void main(void)
   gl_Position = (projectionMatrix * viewMatrix * modelMatrix) * v; 
   color = v_color; 
   lightSpaceFragPos = (projectionMatrix * lightMatrix * vec4(fragPos, 1.0));
+  lightPos = (inverse(lightMatrix) * vec4(0,0,0,1)).xyz;
 }
           

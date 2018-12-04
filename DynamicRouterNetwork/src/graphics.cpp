@@ -165,14 +165,14 @@ void Graphics::Update(unsigned int dt) {
 }
 
 void Graphics::RenderObjects(Shader *shader) {
-	// Send in the projection and view to the shader
-	glUniformMatrix4fv(shader->GetUniformLocation("projectionMatrix"), 1, GL_FALSE,
-			glm::value_ptr(m_camera->GetProjection()));
 
 	//read graph state and render routers
-
-	RenderRouter(shader, glm::vec3(0,0,0));
-	RenderRouter(shader, glm::vec3(1,0,1));
+	Graph<Router> graph = drn.GetGraph();
+	int i = 0;
+	while (graph.GetVertexWithID(i) != NULL) {
+		RenderRouter(shader, glm::vec3(i-2,0,0));
+		i++;
+	}
 }
 
 void Graphics::RenderAllConnections(Shader *shader) {
@@ -191,6 +191,16 @@ void Graphics::RenderConnection(glm::vec3 from, glm::vec3 to) {
 void Graphics::RenderRouter(Shader *shader , glm::vec3 position) {
 	glm::mat4 newPos = glm::translate(position) * m_cube->GetModel();
 
+	// Send in the projection and view to the shader
+	glUniformMatrix4fv(shader->GetUniformLocation("projectionMatrix"), 1, GL_FALSE,
+			glm::value_ptr(m_camera->GetProjection()));
+
+	glUniformMatrix4fv(shader->GetUniformLocation("viewMatrix"), 1, GL_FALSE,
+			glm::value_ptr(m_camera->GetView()));
+
+	glUniformMatrix4fv(shader->GetUniformLocation("lightMatrix"), 1, GL_FALSE,
+			glm::value_ptr(lightMatrix));
+
 	// Render the object
 	glUniformMatrix4fv(shader->GetUniformLocation("modelMatrix"), 1, GL_FALSE,
 			glm::value_ptr(newPos));
@@ -205,8 +215,6 @@ void Graphics::Render() {
 	m_shadowShader->Enable();
 
 	//render using the light matrix
-	glUniformMatrix4fv(m_shadowShader->GetUniformLocation("viewMatrix"), 1, GL_FALSE,
-			glm::value_ptr(lightMatrix));
 	RenderObjects(m_shadowShader);
 
 	//use our new frame buffer
@@ -219,10 +227,7 @@ void Graphics::Render() {
 	// Start the correct program
 	m_shader->Enable();
 	m_shadowBuffer->useDepthOutput(GL_TEXTURE0);
-	glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE,
-			glm::value_ptr(m_camera->GetView()));
-	glUniformMatrix4fv(m_shader->GetUniformLocation("lightMatrix"), 1, GL_FALSE,
-			glm::value_ptr(lightMatrix));
+
 	RenderObjects(m_shader);
 	RenderAllConnections(m_shader);
 

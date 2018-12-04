@@ -22,7 +22,7 @@ int main(void) {
 	engine = NULL;
 
 	//TODO delete
-	DynamicRouterNetwork drn;
+/*	DynamicRouterNetwork drn;
 	drn.Initialize();
 
 	bool running = true;
@@ -140,13 +140,7 @@ int main(void) {
 		default:
 			cout << "Invalid entry" << endl;
 		}
-	}
-
-	/*
-	 cout << "UPDATE" << endl;
-	 drn.Update();
-	 drn.Print();
-	 */
+	}*/
 
 	return 0;
 }
