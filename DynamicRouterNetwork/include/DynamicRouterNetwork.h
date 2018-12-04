@@ -36,6 +36,8 @@ public:
   vector<int>* BestPathDijsktra(int from, int to);
   vector<int>* BestPathBellmanFord(int from, int to);
 
+  Graph<Router>& GetGraph();
+
 private:
 
   Graph<Router> m_graph;

@@ -109,10 +109,6 @@ void DynamicRouterNetwork::Initialize()
   m_graph.ConnectVertices(4, 2, 0, initialEdgeCosts);
   initialEdgeCosts.clear();
 
-
-  //Testing disconnected graph
-  AddRouter();
-
 }
 
 void DynamicRouterNetwork::Update()
@@ -618,4 +614,9 @@ vector<int>* DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
 
   return path;
 
+}
+
+Graph<Router>& DynamicRouterNetwork::GetGraph()
+{
+  return m_graph;
 }
