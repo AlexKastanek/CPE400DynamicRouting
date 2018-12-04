@@ -414,17 +414,6 @@ void DynamicRouterNetwork::Print()
   m_graph.Print();
 }
 
-/**
-* For these best path algorithms. The best path can be calculated by recursively
-* getting the path cost to each neighboring vertex then traveling to that vertex
-* and repeating. To get the path cost, get the edge cost then the neighboring
-* node's node cost. Edge cost is calculated by calling GetEdgeCost on the from
-* vertex and then passing the id of the to vertex as the parameter to GetEdgeCost(int)
-* The node cost can be calculated by calling GetData() on the to vertex and then
-* calling GetNodalProcessingDelay() and GetQueueingDelay() on the return val
-* from GetData(). And of course if you have any questions please ask me.
-*/
-
 vector<int>* DynamicRouterNetwork::BestPathDijsktra(int from, int to)
 {
   int verticesRemaining = m_graph.GetMap().size();
@@ -519,6 +508,7 @@ vector<int>* DynamicRouterNetwork::BestPathDijsktra(int from, int to)
     reversePath.pop ();
   }
 
+  /*
   //This can be removed, it is just debug output
   cout << "Best DJ path from " << from << " to " << to << " is { ";
   for (int i = 0; i < path->size (); i++)
@@ -527,6 +517,7 @@ vector<int>* DynamicRouterNetwork::BestPathDijsktra(int from, int to)
 
   }
   cout << "}" << endl;
+  */
 
   return path;
 
@@ -535,13 +526,6 @@ vector<int>* DynamicRouterNetwork::BestPathDijsktra(int from, int to)
 vector<int>* DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
 {
   int vertexCount = m_graph.GetMap().size();
-
-  //TODO: turn these vectors into maps so they can be accessed
-  //  by vertex ID which won't always be of range 0 to graph size
-
-  //vector<double> distance (vertexCount, 99999.0); //Creates a set of shortest lengths to each node, 99999.0=inf
-  //vector<int> previous (vertexCount, -1); //Keeps track of the previous node on the path to a given node. Ex. previous[3] = 5 means that 3 was reached through 5 on the shortest path
-
   map<int, double> distance; //creates a set of shortest lengths to each node
   map<int, int> previous; //keeps track of the previous node on the path to a given node. Ex. previous[3] = 5 means that 3 was reached through 5 on the shortest path
 
@@ -555,37 +539,32 @@ vector<int>* DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
 
   distance [from] = 0; //Set Source -> Source distance to 0
 
-  //TODO make this compatible with maps
-  /*
-  for (int i = 0; i < vertexCount; i++) //BF runs vertexCount times
+  for (it = m_graph.GetMap().begin(); it != m_graph.GetMap().end(); it++)
   {
-    Vertex<Router>* nextVertex = m_graph.GetVertexWithID (i); //Node u
-
-    //For each edge (u,v)
-    for (int j = 0; j < nextVertex->m_adjacencyList.size(); j++)
+    //For each edge (u, v)
+    map<int, Vertex<Router>*>::iterator it2;
+    for (it2 = it; it2 != m_graph.GetMap().end(); it2++)
     {
-      int destinationIndex = nextVertex->m_adjacencyList[j].second->GetID();
-
-      //Calculate weight
-      double weight = 0;
-      vector<double> edgeCosts = nextVertex->m_adjacencyList[j].first.costs;
-      for (int j = 0; j < edgeCosts.size(); j++)
+      Vertex<Router>* nextVertex = it2->second;
+      for (int i = 0; i < nextVertex->m_adjacencyList.size(); i++)
       {
-        weight += edgeCosts[j];
+        int destinationIndex = nextVertex->m_adjacencyList[i].second->GetID();
+    
+        //Calculate weight
+        double weight;
+        vector<double> edgeCosts = nextVertex->m_adjacencyList[i].first.costs;
+        weight = edgeCosts[0] + edgeCosts[1] +
+          nextVertex->m_adjacencyList[i].second->GetData().GetNodalProcessingDelay() +
+          nextVertex->m_adjacencyList[i].second->GetData().GetQueuingDelay();
+    
+        if ((weight + distance[it2->first]) < distance[destinationIndex])
+        {
+          distance [destinationIndex] = weight + distance[it2->first];
+          previous [destinationIndex] = it2->first;
+        }
       }
-      
-      if (weight + distance [i] < distance [destinationIndex])
-      {
-        distance [destinationIndex] = weight + distance [i];
-        previous [destinationIndex] = i;
-
-      }
-
     }
-
-
   }
-  */
 
   //Here checking for negative-weight cycles would be done, but since we are guarenteed to not have any it can be skipped
 
@@ -617,6 +596,7 @@ vector<int>* DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
 
   }
 
+  /*
   //This can be removed, it is just debug output
   cout << "Best BF path from " << from << " to " << to << " is { ";
   for (int i = 0; i < path->size (); i++)
@@ -625,6 +605,7 @@ vector<int>* DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
 
   }
   cout << "}" << endl;
+  */
 
   return path;
 
