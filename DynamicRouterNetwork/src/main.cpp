@@ -2,6 +2,7 @@
 #define MAIN
 
 #include <iostream>
+#include <limits>
 
 #include "DynamicRouterNetwork.h"
 
@@ -41,6 +42,8 @@ int main(void)
 
     int userSelection;
     cin >> userSelection;
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     switch (userSelection)
     {
@@ -162,7 +165,7 @@ int main(void)
         running = false;
         break;
       default:
-        cout << "Invalid entry" << endl;
+        cout << "Invalid entry " << endl;
     }
   }
   

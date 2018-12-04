@@ -312,6 +312,7 @@ void DynamicRouterNetwork::ChangeRouters()
   srand(time(NULL));
 
   double changeAmount = 0;
+  bool isNegative = false;
 
   //loop through each node
   typename map<int, Vertex<Router>*>::iterator it;
@@ -321,13 +322,31 @@ void DynamicRouterNetwork::ChangeRouters()
   {
     //change nodal processing delay
     changeAmount = ((double)(rand() % 100 + 1)) / 10000.0;
+    isNegative = ((bool)((rand() % 2 + 1) - 1)); //either 0 or 1
+    if (isNegative)
+    {
+      changeAmount *= -1;
+    }
     double nodalProcessingDelay = it->second->GetData().GetNodalProcessingDelay();
     nodalProcessingDelay += changeAmount;
+    if (nodalProcessingDelay < 0)
+    {
+      nodalProcessingDelay = 0;
+    }
 
     //change queuing delay
     changeAmount = ((double)(rand() % 100 + 1)) / 10000.0;
+    isNegative = ((bool)((rand() % 2 + 1) - 1)); //either 0 or 1
+    if (isNegative)
+    {
+      changeAmount *= -1;
+    }
     double queuingDelay = it->second->GetData().GetQueuingDelay();
     queuingDelay += changeAmount;
+    if (queuingDelay < 0)
+    {
+      queuingDelay = 0;
+    }
 
     //set the new delays
     Router newRouterData(nodalProcessingDelay, queuingDelay);
@@ -351,11 +370,29 @@ void DynamicRouterNetwork::ChangeRouters()
 
         //change transmission delay
         changeAmount = ((double)(rand() % 100 + 1)) / 10000.0;
+        isNegative = ((bool)((rand() % 2 + 1) - 1)); //either 0 or 1
+        if (isNegative)
+        {
+          changeAmount *= -1;
+        }
         transmissionDelay += changeAmount;
+        if (transmissionDelay < 0)
+        {
+          transmissionDelay = 0;
+        }
 
         //change propagation delay
         changeAmount = ((double)(rand() % 100 + 1)) / 10000.0;
+        isNegative = ((bool)((rand() % 2 + 1) - 1)); //either 0 or 1
+        if (isNegative)
+        {
+          changeAmount *= -1;
+        }
         propagationDelay += changeAmount;
+        if (propagationDelay < 0)
+        {
+          propagationDelay = 0;
+        }
 
         //set the new delays
         edgeDelays[0] = transmissionDelay;
@@ -416,7 +453,33 @@ bool DynamicRouterNetwork::PathExists(int from, int to)
 
 void DynamicRouterNetwork::Print()
 {
-  m_graph.Print();
+  typename map<int, Vertex<Router>*>::iterator it;
+
+  for (it = m_graph.GetMap().begin(); it != m_graph.GetMap().end(); it++)
+  {
+    Vertex<Router>* vertex = it->second;
+    Router router = vertex->GetData();
+    cout << "Vertex " << it->first
+         << " with node cost "
+         << router.GetNodalProcessingDelay() + router.GetQueuingDelay()
+         << " is connected to vertices:" << endl;
+    for (int i = 0; i < vertex->m_adjacencyList.size(); i++)
+    {
+      //add up each componenet of the vertex's edge cost
+      double totalEdgeCost = 0;
+      vector<double> edgeCosts = vertex->m_adjacencyList[i].first.costs;
+      for (int j = 0; j < edgeCosts.size(); j++)
+      {
+        totalEdgeCost += edgeCosts[j];
+      }
+
+      cout << vertex->m_adjacencyList[i].second->GetID()
+           << " with edge cost " 
+           << totalEdgeCost
+           << endl;
+    }
+    cout << endl;
+  }
 }
 
 vector<int>* DynamicRouterNetwork::BestPathDijsktra(int from, int to)
