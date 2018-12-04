@@ -7,3 +7,4 @@ DynamicRouterNetwork/[Bb]uild/*
 #ignore Eclipse project settings files as well
 *.project
 *.cproject
+.settings/*
