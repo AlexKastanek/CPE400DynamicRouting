@@ -168,10 +168,13 @@ void Graphics::RenderObjects(Shader *shader) {
 
 	//read graph state and render routers
 	Graph<Router> graph = drn.GetGraph();
+	int size = graph.GetMap().size();
+	float radius = 2;
 	int i = 0;
-	while (graph.GetVertexWithID(i) != NULL) {
-		RenderRouter(shader, glm::vec3(i-2,0,0));
-		i++;
+	for (int i = 0; i < size; i++) {
+		//put in a circle based on router count
+		double angle = glm::radians((360.0/size)*i);
+		RenderRouter(shader, glm::vec3(glm::cos(angle)*radius,0,glm::sin(angle)*radius));
 	}
 }
 
