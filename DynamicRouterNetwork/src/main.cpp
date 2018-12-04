@@ -60,20 +60,35 @@ int main(void)
             cout << "Please enter the ID of the source router: ";
             cin >> from;
             validEntry = drn.VertexExists(from);
+
+            if (!validEntry)
+            {
+              cout << "That is an invalid entry. ";
+            }
           }
 
           validEntry = false;
           while (!validEntry)
           {
             cout << "Please enter the ID of the destination router: ";
-           cin >> to;
+            cin >> to;
             validEntry = drn.VertexExists(to);
+
+            if (!validEntry)
+            {
+              cout << "That is an invalid entry. ";
+            } 
+            else if (to == from)
+            {
+              validEntry = false;
+              cout << "The source cannot be the same as the destination. ";
+            }
           }
 
           validPath = drn.PathExists(from, to);
           if (!validPath)
           {
-            cout << "Invalid path. Please enter a connected source and destination router" << endl;
+            cout << "Invalid entry. There is no connected path between source and destination" << endl;
           }
         }
 
@@ -99,20 +114,35 @@ int main(void)
             cout << "Please enter the ID of the source router: ";
             cin >> from;
             validEntry = drn.VertexExists(from);
+
+            if (!validEntry)
+            {
+              cout << "That is an invalid entry. ";
+            }
           }
 
           validEntry = false;
           while (!validEntry)
           {
             cout << "Please enter the ID of the destination router: ";
-           cin >> to;
+            cin >> to;
             validEntry = drn.VertexExists(to);
+
+            if (!validEntry)
+            {
+              cout << "That is an invalid entry. ";
+            } 
+            else if (to == from)
+            {
+              validEntry = false;
+              cout << "The source cannot be the same as the destination. ";
+            }
           }
 
           validPath = drn.PathExists(from, to);
           if (!validPath)
           {
-            cout << "Invalid path. Please enter a connected source and destination router" << endl;
+            cout << "Invalid entry. There is no connected path between source and destination" << endl;
           }
         }
 
