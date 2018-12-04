@@ -24,11 +24,12 @@ float shadowCalc(vec4 fragPosLightSpace)
 void main(void)
 {
    vec3 lightPos = vec3(3,5,-2);
-   vec3 N = (modelMatrix * vec4(color, 1.0)).xyz;
+   vec3 N = normalize((modelMatrix * vec4(color, 1.0)).xyz);
    vec3 L = normalize(lightPos - fragPos);
    vec3 objColor = (color + vec3(1))/2.0;
    float diff = dot(N, L);
    float shadow = shadowCalc(lightSpaceFragPos);
    float amb = 0.1;
-   frag_color = vec4(diff*shadow*objColor, 1.0);
+   vec3 finalLight = (max(0.0, diff*shadow) + amb)*vec3(1.0f);
+   frag_color = vec4(finalLight*objColor, 1.0);
 }

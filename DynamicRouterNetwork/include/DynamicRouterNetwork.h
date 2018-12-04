@@ -29,11 +29,14 @@ public:
   void GenerateEdgeCosts(vector<double>& edgeCosts);
 
   bool VertexExists(int id);
+  bool PathExists(int from, int to);
 
   void Print();
 
   vector<int>* BestPathDijsktra(int from, int to);
   vector<int>* BestPathBellmanFord(int from, int to);
+
+  Graph<Router>& GetGraph();
 
 private:
 

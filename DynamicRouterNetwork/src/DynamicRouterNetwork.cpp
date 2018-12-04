@@ -409,6 +409,11 @@ bool DynamicRouterNetwork::VertexExists(int id)
   }
 }
 
+bool DynamicRouterNetwork::PathExists(int from, int to)
+{
+  return m_graph.BFS(from, to);
+}
+
 void DynamicRouterNetwork::Print()
 {
   m_graph.Print();
@@ -609,4 +614,9 @@ vector<int>* DynamicRouterNetwork::BestPathBellmanFord(int from, int to)
 
   return path;
 
+}
+
+Graph<Router>& DynamicRouterNetwork::GetGraph()
+{
+  return m_graph;
 }
