@@ -57,6 +57,13 @@ int main(void)
           cout << "Please enter the ID of the source router: ";
           cin >> from;
           validEntry = drn.VertexExists(from);
+
+          if (!validEntry)
+          {
+            cout << "That is an invalid entry. ";
+
+          }
+
         }
 
         validEntry = false;
@@ -65,6 +72,19 @@ int main(void)
           cout << "Please enter the ID of the destination router: ";
           cin >> to;
           validEntry = drn.VertexExists(to);
+
+          if (!validEntry)
+          {
+            cout << "That is an invalid entry. ";
+
+          } else if (to == from)
+          {
+            validEntry = false;
+
+            cout << "The source cannot be the same as the destination. ";
+
+          }
+
         }
 
         bestPath = new vector<int>;
@@ -86,6 +106,13 @@ int main(void)
           cout << "Please enter the ID of the source router: ";
           cin >> from;
           validEntry = drn.VertexExists(from);
+
+          if (!validEntry)
+          {
+            cout << "That is an invalid entry. ";
+
+          }
+
         }
 
         validEntry = false;
@@ -94,6 +121,19 @@ int main(void)
           cout << "Please enter the ID of the destination router: ";
           cin >> to;
           validEntry = drn.VertexExists(to);
+
+          if (!validEntry)
+          {
+            cout << "That is an invalid entry. ";
+
+          } else if (to == from)
+          {
+            validEntry = false;
+
+            cout << "The source cannot be the same as the destination. ";
+
+          }
+
         }
 
         bestPath = new vector<int>;
