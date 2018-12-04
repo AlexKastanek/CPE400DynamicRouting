@@ -111,6 +111,7 @@ bool Graphics::Initialize(int width, int height) {
 void Graphics::Update(unsigned int dt) {
 	// Update the object
 	m_cube->Update(dt);
+	drn.Update();
 }
 
 void Graphics::RenderObjects(Shader *shader) {
@@ -119,7 +120,10 @@ void Graphics::RenderObjects(Shader *shader) {
 	int size = graph.GetMap().size();
 	for (int i = 0; i < size; i++) {
 		//put in a circle based on router count
-		RenderRouter(shader, RouterPosition(i, size));
+		auto vertex = graph.GetVertexWithID(i);
+		if (vertex != NULL) {
+			RenderRouter(shader, RouterPosition(i, size));
+		}
 	}
 }
 
@@ -140,9 +144,14 @@ void Graphics::RenderAllConnections(Shader *shader) {
 	int size = graph.GetMap().size();
 	for (int i = 0; i < size; i++) {
 		auto vertex = graph.GetVertexWithID(i);
-		for (int j = 0; j < size; j++) {
-			if (vertex->IsConnectedTo(j)) {
-				RenderConnection(RouterPosition(i, size), RouterPosition(j, size));
+		if (vertex != NULL) {
+			for (int j = 0; j < size; j++) {
+				if (vertex->IsConnectedTo(j)) {
+					glm::vec2 color = glm::vec2(vertex->GetEdgeCost(j)*30,0);
+					glUniform2fv(shader->GetUniformLocation("lineColor"), 1,
+							glm::value_ptr(color));
+					RenderConnection(RouterPosition(i, size), RouterPosition(j, size));
+				}
 			}
 		}
 	}
@@ -201,7 +210,7 @@ void Graphics::Render() {
 	m_frameBuffer->useBuffer();
 
 	//clear the screen
-	glClearColor(0.0, 0.2, 0.3, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Start the correct program
