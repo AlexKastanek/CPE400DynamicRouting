@@ -33,10 +33,12 @@ class Graphics
     Shader *m_shader;
     Shader *m_screenShader;
     Shader *m_shadowShader;
+    Shader *m_linkShader;
 
     GLint m_projectionMatrix;
     GLint m_viewMatrix;
     GLint m_modelMatrix;
+    GLuint connections;
 
     FrameBuffer *m_frameBuffer;
     FrameBuffer *m_shadowBuffer;

@@ -43,79 +43,25 @@ bool Graphics::Initialize(int width, int height) {
 	m_cube = new Object();
 
 	// Set up the shaders
-	m_shader = new Shader();
-	if (!m_shader->Initialize()) {
-		printf("Shader Failed to Initialize\n");
-		return false;
-	}
-
-	// Add the vertex shader
-	if (!m_shader->AddShader(GL_VERTEX_SHADER, "assets/vertexShader.s")) {
-		printf("Vertex Shader failed to Initialize\n");
-		return false;
-	}
-
-	// Add the fragment shader
-	if (!m_shader->AddShader(GL_FRAGMENT_SHADER, "assets/fragmentShader.s")) {
-		printf("Fragment Shader failed to Initialize\n");
-		return false;
-	}
-
-	// Connect the program
-	if (!m_shader->Finalize()) {
-		printf("Program to Finalize\n");
-		return false;
-	}
-
 	//setup screen shader
 	m_screenShader = new Shader();
-	if (!m_screenShader->Initialize()) {
-		printf("Shader Failed to Initialize\n");
+	if (!m_screenShader->CreateShader("assets/screen.vert", "assets/screen.frag"))
 		return false;
-	}
 
-	// Add the vertex shader
-	if (!m_screenShader->AddShader(GL_VERTEX_SHADER, "assets/screen.vert")) {
-		printf("Vertex Shader failed to Initialize\n");
-		return false;
-	}
-
-	// Add the fragment shader
-	if (!m_screenShader->AddShader(GL_FRAGMENT_SHADER, "assets/screen.frag")) {
-		printf("Fragment Shader failed to Initialize\n");
-		return false;
-	}
-
-	// Connect the program
-	if (!m_screenShader->Finalize()) {
-		printf("Program to Finalize\n");
-		return false;
-	}
-
-	//setup shadow shader
+	//setup screen shader
 	m_shadowShader = new Shader();
-	if (!m_shadowShader->Initialize()) {
-		printf("Shader Failed to Initialize\n");
+	if (!m_shadowShader->CreateShader("assets/passthrough.vert", "assets/passthrough.frag"))
 		return false;
-	}
 
-	// Add the vertex shader
-	if (!m_shadowShader->AddShader(GL_VERTEX_SHADER, "assets/passthrough.vert")) {
-		printf("Vertex Shader failed to Initialize\n");
+	//setup link shader
+	m_linkShader = new Shader();
+	if (!m_linkShader->CreateShader("assets/link.vert", "assets/link.frag"))
 		return false;
-	}
 
-	// Add the fragment shader
-	if (!m_shadowShader->AddShader(GL_FRAGMENT_SHADER, "assets/passthrough.frag")) {
-		printf("Fragment Shader failed to Initialize\n");
+	//setup screen shader
+	m_shader = new Shader();
+	if (!m_shader->CreateShader("assets/vertexShader.s", "assets/fragmentShader.s"))
 		return false;
-	}
-
-	// Connect the program
-	if (!m_shadowShader->Finalize()) {
-		printf("Program to Finalize\n");
-		return false;
-	}
 
 	// Locate the projection matrix in the shader
 	m_projectionMatrix = m_shader->GetUniformLocation("projectionMatrix");
@@ -145,7 +91,7 @@ bool Graphics::Initialize(int width, int height) {
 	m_shadowBuffer = new FrameBuffer(width,height);
 
 	//setup shadowed light
-	lightMatrix = glm::lookAt(glm::vec3(3.0f, 5.0f, -2.0f),
+	lightMatrix = glm::lookAt(glm::vec3(2.0f, 3.0f, -2.0f),
                                   glm::vec3( 0.0f, 0.0f,  0.0f), 
                                   glm::vec3( 0.0f, 1.0f,  0.0f));  
 
@@ -155,6 +101,9 @@ bool Graphics::Initialize(int width, int height) {
 
 	//initialize Dynamic router network
 	drn.Initialize();
+
+	//initialize link array
+	glGenBuffers(1, &connections);
 
 	return true;
 }
@@ -179,13 +128,29 @@ void Graphics::RenderObjects(Shader *shader) {
 }
 
 void Graphics::RenderAllConnections(Shader *shader) {
-	RenderConnection(glm::vec3(0,0,0), glm::vec3(1,1,1));
+	//pass in default matrices
+
+	glUniformMatrix4fv(shader->GetUniformLocation("projectionMatrix"), 1, GL_FALSE,
+			glm::value_ptr(m_camera->GetProjection()));
+
+	glUniformMatrix4fv(shader->GetUniformLocation("viewMatrix"), 1, GL_FALSE,
+			glm::value_ptr(m_camera->GetView()));
+
+	glUniformMatrix4fv(shader->GetUniformLocation("modelMatrix"), 1, GL_FALSE,
+			glm::value_ptr(glm::mat4(1.0)));
+
+	RenderConnection(glm::vec3(0,0,0), glm::vec3(3,0,0));
 }
 void Graphics::RenderConnection(glm::vec3 from, glm::vec3 to) {
-	//glBegin(GL_LINES);
-	//    glVertex3f(from.x, from.y, from.z);
-	//    glVertex3f(to.x, to.y, to.z);
-	//glEnd();
+	float link[] = {from.x, from.y, from.z, to.x, to.y, to.z};
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, connections);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(link), link, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glLineWidth(5.0);
+	glDrawArrays(GL_LINES, 0, 6);
+	glDisableVertexAttribArray(0);
 }
 
 /**
@@ -232,7 +197,8 @@ void Graphics::Render() {
 	m_shadowBuffer->useDepthOutput(GL_TEXTURE0);
 
 	RenderObjects(m_shader);
-	RenderAllConnections(m_shader);
+	m_linkShader->Enable();
+	RenderAllConnections(m_linkShader);
 
 	//use the original screen frame buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

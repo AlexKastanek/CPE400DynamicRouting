@@ -121,3 +121,31 @@ GLint Shader::GetUniformLocation(const char* pUniformName) {
 
 	return Location;
 }
+
+bool Shader::CreateShader(string vert, string frag) {
+	//setup screen shader
+	if (!Initialize()) {
+		printf("Shader Failed to Initialize\n");
+		return false;
+	}
+
+	// Add the vertex shader
+	if (!AddShader(GL_VERTEX_SHADER, vert)) {
+		printf("Vertex Shader failed to Initialize\n");
+		return false;
+	}
+
+	// Add the fragment shader
+	if (!AddShader(GL_FRAGMENT_SHADER, frag)) {
+		printf("Fragment Shader failed to Initialize\n");
+		return false;
+	}
+
+	// Connect the program
+	if (!Finalize()) {
+		printf("Program to Finalize\n");
+		return false;
+	}
+
+	return true;
+}

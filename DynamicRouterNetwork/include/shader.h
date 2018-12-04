@@ -13,6 +13,7 @@ class Shader
     bool Initialize();
     void Enable();
     bool AddShader(GLenum ShaderType, string filename);
+    bool CreateShader(string vert, string frag);
     bool Finalize();
     GLint GetUniformLocation(const char* pUniformName);
 
