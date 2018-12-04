@@ -22,7 +22,7 @@ Object::Object() {
 
 	glGenBuffers(1, &VB);
 	glBindBuffer(GL_ARRAY_BUFFER, VB);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * Vertices.size(),
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GraphicsVertex) * Vertices.size(),
 			&Vertices[0], GL_STATIC_DRAW);
 
 	glGenBuffers(1, &IB);
@@ -58,9 +58,9 @@ void Object::Render() {
 	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VB);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-			(void*) offsetof(Vertex, color));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GraphicsVertex), 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GraphicsVertex),
+			(void*) offsetof(GraphicsVertex, color));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
 

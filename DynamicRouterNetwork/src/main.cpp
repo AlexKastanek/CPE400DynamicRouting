@@ -4,11 +4,23 @@
 #include <iostream>
 
 #include "DynamicRouterNetwork.h"
+#include "engine.h"
 
 using namespace std;
 
 int main(void)
 {
+	// Start an engine and run it then cleanup after
+	Engine *engine = new Engine("Tutorial Window Name", 0, 0);
+	if (!engine->Initialize()) {
+		printf("The engine failed to start.\n");
+		delete engine;
+		engine = NULL;
+		return 1;
+	}
+	engine->Run();
+	delete engine;
+	engine = NULL;
 
   DynamicRouterNetwork drn;
 

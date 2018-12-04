@@ -16,12 +16,12 @@ obj::~obj() {
 	indices.empty();
 }
 
-void obj::addVert(Vertex vert) {
+void obj::addVert(GraphicsVertex vert) {
 	vertices.push_back(vert);
 }
 
-void obj::addVert(Vertex vert, int index) {
-	vector<Vertex>::iterator i;
+void obj::addVert(GraphicsVertex vert, int index) {
+	vector<GraphicsVertex>::iterator i;
 
 	//insert if it doesn't yet exist
 	i = vertices.begin() + index;
@@ -30,7 +30,7 @@ void obj::addVert(Vertex vert, int index) {
 		vertices.insert(i, vert);
 	} else {
 		//otherwise, average normals
-		Vertex temp = vertices.at(index);
+		GraphicsVertex temp = vertices.at(index);
 		temp.color = glm::normalize(temp.color + vert.color);
 		vertices.erase(i);
 		vertices.insert(i, temp);
@@ -46,11 +46,11 @@ void obj::addRaw(glm::vec3 raw) {
 
 	//allocate size for new vertex in vertices
 	glm::vec3 item;
-	Vertex temp(item, item);
+	GraphicsVertex temp(item, item);
 	vertices.push_back(temp);
 }
 
-vector<Vertex> obj::getVerts() {
+vector<GraphicsVertex> obj::getVerts() {
 	return vertices;
 }
 

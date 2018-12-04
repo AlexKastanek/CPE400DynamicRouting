@@ -18,7 +18,7 @@ class Object
 
   private:
     glm::mat4 model;
-    std::vector<Vertex> Vertices;
+    std::vector<GraphicsVertex> Vertices;
     std::vector<unsigned int> Indices;
     GLuint VB;
     GLuint IB;

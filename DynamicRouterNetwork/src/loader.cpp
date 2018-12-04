@@ -186,7 +186,7 @@ void loader::calculateNormals(obj &object) {
 	glm::vec3 vert3;
 	glm::vec3 final;
 
-	Vertex *temp = NULL;
+	GraphicsVertex *temp = NULL;
 
 	vector<unsigned int> indices = object.getIndices();
 	vector<glm::vec3> vertices = object.getRawVerts();
@@ -213,15 +213,15 @@ void loader::calculateNormals(obj &object) {
 		if (isAnnoying)
 			cout << "built vert at" << indices[i] - 1 << endl;
 
-		temp = new Vertex(vert1, final);
+		temp = new GraphicsVertex(vert1, final);
 		object.addVert(*temp, indices[i] - 1);
 		delete temp;
 
-		temp = new Vertex(vert2, final);
+		temp = new GraphicsVertex(vert2, final);
 		object.addVert(*temp, indices[i + 1] - 1);
 		delete temp;
 
-		temp = new Vertex(vert3, final);
+		temp = new GraphicsVertex(vert3, final);
 		object.addVert(*temp, indices[i + 2] - 1);
 		delete temp;
 		temp = NULL;

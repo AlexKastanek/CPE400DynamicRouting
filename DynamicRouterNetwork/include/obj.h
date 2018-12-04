@@ -15,18 +15,18 @@ using namespace std;
 class obj {
 private:
 	vector<glm::vec3> vertRaw;
-    vector<Vertex> vertices;
+    vector<GraphicsVertex> vertices;
     vector<unsigned int> indices;
 public:
     obj();
     ~obj();
 
-    void addVert(Vertex);
-    void addVert(Vertex, int);
+    void addVert(GraphicsVertex);
+    void addVert(GraphicsVertex, int);
     void addIndice(unsigned int);
     void addRaw(glm::vec3);
 
-    vector<Vertex> getVerts();
+    vector<GraphicsVertex> getVerts();
     vector<unsigned int> getIndices();
     vector<glm::vec3> getRawVerts();
 };
