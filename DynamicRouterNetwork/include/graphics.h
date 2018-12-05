@@ -49,6 +49,10 @@ class Graphics
 
     float minCost;
     float maxCost;
+    int pathAlgorithm;
+    vector<int> *path;
+    int source;
+    int destination;
 
     Object *m_cube;
 };

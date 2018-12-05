@@ -3,6 +3,10 @@
 Graphics::Graphics() {
 	minCost = 99999;
 	maxCost = 0;
+	pathAlgorithm = 0;
+	path = NULL;
+	source = 0;
+	destination = 2;
 }
 
 Graphics::~Graphics() {
@@ -116,7 +120,25 @@ void Graphics::Update(unsigned int dt) {
 
 void Graphics::StepSimulation() {
 	drn.Update();
-	//calulate dijkstras
+	//calulate based on currently selected algorithm
+	switch (pathAlgorithm) {
+	case 0:
+		//no shortest path, return null
+		path = NULL;
+		break;
+	case 1:
+		//calculate dijkstras shortest path
+		if (path != NULL)
+			delete path;
+		path = drn.BestPathDijsktra(source, destination);
+		break;
+	case 2:
+		//calculate bellman ford shortest path
+		if (path != NULL)
+			delete path;
+		path = drn.BestPathBellmanFord(source, destination);
+		break;
+	}
 }
 
 void Graphics::RenderObjects(Shader *shader) {
@@ -148,6 +170,7 @@ void Graphics::RenderAllConnections(Shader *shader) {
 	//read graph state and render routers
 	Graph<Router> graph = drn.GetGraph();
 	int size = graph.GetMap().size();
+
 	for (int i = 0; i < size; i++) {
 		auto vertex = graph.GetVertexWithID(i);
 		if (vertex != NULL) {
@@ -161,7 +184,22 @@ void Graphics::RenderAllConnections(Shader *shader) {
 					if (cost > maxCost)
 						maxCost = cost;
 
+					//calculate link quality
 					glm::vec2 color = glm::vec2((cost-minCost)/maxCost-minCost, 0.0);
+
+					//display if shortest path
+					if (path != NULL) {
+						vector<int>::iterator it = path->begin();
+						it++;
+						while (it != path->end()) {
+							if ((*(it-1) == i && *it == j) || (*(it-1) == j && *it == i)) {
+								color.y = 1.0;
+							}
+							it++;
+						}
+					}
+
+					//render
 					glUniform2fv(shader->GetUniformLocation("lineColor"), 1,
 							glm::value_ptr(color));
 					RenderConnection(RouterPosition(i, size), RouterPosition(j, size));
@@ -264,8 +302,32 @@ void Graphics::Render() {
 	m_frameBuffer->renderToScreen();
 
 	//render GUI
-	if (ImGui::Button("Meow")) {
-	    std::cout << "Meow\n";
+	ImGui::Text("Shortest Path Source/Destination:");
+
+	ImGui::InputInt("Source", &source);
+	ImGui::InputInt("Destination", &destination);
+
+	ImGui::Text("Shortest Path Algorithm:");
+
+	if (ImGui::RadioButton("None", &pathAlgorithm, 0)) {
+	    cout << "Setting to no shortest path algorithm" << endl;
+		if (path != NULL)
+			delete path;
+		path = NULL;
+	}
+
+	if (ImGui::RadioButton("Dijkstra's", &pathAlgorithm, 1)) {
+		cout << "Setting to Dijkstra's algorithm" << endl;
+		if (path != NULL)
+			delete path;
+		path = drn.BestPathDijsktra(source, destination);
+	}
+
+	if (ImGui::RadioButton("Bellman Ford", &pathAlgorithm, 2)) {
+		cout << "Setting to Bellman Ford algorithm" << endl;
+		if (path != NULL)
+			delete path;
+		path = drn.BestPathBellmanFord(source, destination);
 	}
 
 	// Get any errors from OpenGL
