@@ -129,8 +129,15 @@ void Graphics::StepSimulation() {
 
 void Graphics::CalculateShortestPath() {
   Graph<Router> graph = drn.GetGraph();
+
+  if (path == NULL)
+  {
+    cout << "path is null 1" << endl;
+  }
+
   if (!graph.BFS(source, destination) || source == destination)
   {
+    cout << "no path" << endl;
     if (path != NULL)
     {
       delete path;
@@ -139,11 +146,13 @@ void Graphics::CalculateShortestPath() {
   }
   else
   {
+    cout << "path exists" << endl;
     if (path != NULL)
     {
       delete path;
       path = NULL;
     }
+    cout << pathAlgorithm << endl;
     switch (pathAlgorithm) {
     case 0:
       //no shortest path, return null
@@ -162,6 +171,13 @@ void Graphics::CalculateShortestPath() {
       break;
     }
   }
+
+  if (path == NULL)
+  {
+    cout << "path is null 2" << endl;
+  }
+
+  cout << "exiting calculate shortest path function" << endl;
 }
 
 void Graphics::RenderObjects(Shader *shader) {
@@ -331,6 +347,34 @@ void Graphics::Render() {
 	//use the original screen frame buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+  //render GUI
+  ImGui::Text("Shortest Path Source/Destination:");
+
+  if (ImGui::InputInt("Source", &source)) {
+    CalculateShortestPath();
+  }
+
+  if (ImGui::InputInt("Destination", &destination)) {
+    CalculateShortestPath();
+  }
+
+  ImGui::Text("Shortest Path Algorithm:");
+
+  if (ImGui::RadioButton("None", &pathAlgorithm, 0)) {
+      cout << "Setting to no shortest path algorithm" << endl;
+      CalculateShortestPath();
+  }
+
+  if (ImGui::RadioButton("Dijkstra's", &pathAlgorithm, 1)) {
+    cout << "Setting to Dijkstra's algorithm" << endl;
+    CalculateShortestPath();
+  }
+
+  if (ImGui::RadioButton("Bellman Ford", &pathAlgorithm, 2)) {
+    cout << "Setting to Bellman Ford algorithm" << endl;
+    CalculateShortestPath();
+  }
+
 	//clear the screen
 	glClearColor(1.0, 0.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -338,34 +382,6 @@ void Graphics::Render() {
 	//enable screen shader
 	m_screenShader->Enable();
 	m_frameBuffer->renderToScreen();
-
-	//render GUI
-	ImGui::Text("Shortest Path Source/Destination:");
-
-	if (ImGui::InputInt("Source", &source)) {
-		CalculateShortestPath();
-	}
-
-	if (ImGui::InputInt("Destination", &destination)) {
-		CalculateShortestPath();
-	}
-
-	ImGui::Text("Shortest Path Algorithm:");
-
-	if (ImGui::RadioButton("None", &pathAlgorithm, 0)) {
-	    cout << "Setting to no shortest path algorithm" << endl;
-	    CalculateShortestPath();
-	}
-
-	if (ImGui::RadioButton("Dijkstra's", &pathAlgorithm, 1)) {
-		cout << "Setting to Dijkstra's algorithm" << endl;
-		CalculateShortestPath();
-	}
-
-	if (ImGui::RadioButton("Bellman Ford", &pathAlgorithm, 2)) {
-		cout << "Setting to Bellman Ford algorithm" << endl;
-		CalculateShortestPath();
-	}
 
 	//output a path to screen
 	if (path != NULL) {

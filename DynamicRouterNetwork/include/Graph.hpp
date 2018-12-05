@@ -177,6 +177,22 @@ bool Graph<T>::BFS(int from, int to)
 {
   typename map<int, Vertex<T>*>::iterator it;
 
+  //check if vertices exist
+  for (it = m_map.begin(); it != m_map.end(); it++)
+  {
+    if (it->first == from && it->second == NULL)
+    {
+      cout << "from is null" << endl;
+      return false;
+    }
+
+    if (it->first == to && it->second == NULL)
+    {
+      cout << "to is null" << endl;
+      return false;
+    }
+  }
+
   map<int, bool> visited;
   queue<int> q;
 
@@ -186,6 +202,8 @@ bool Graph<T>::BFS(int from, int to)
     visited[it->first] = false;
   }
 
+  cout << "check 1" << endl;
+
   //mark from vertex as visited and enqueue
   visited[from] = true;
   q.push(from);
@@ -193,6 +211,8 @@ bool Graph<T>::BFS(int from, int to)
   int currentVertexID;
   while (!q.empty())
   {
+    cout << "check 2" << endl;
+
     //dequeue current vertex
     currentVertexID = q.front();
     //cout << currentVertexID << endl;
@@ -201,6 +221,11 @@ bool Graph<T>::BFS(int from, int to)
     //get all adjacent vertices to current vertex
     //If adjacent vertex has not been visited, enqueue it
     Vertex<T> *currentVertex = GetVertexWithID(currentVertexID);
+    if (currentVertex == NULL)
+    {
+      cout << "vertex is null" << endl;
+      return false;
+    }
     for (int i = 0; i < currentVertex->m_adjacencyList.size(); i++)
     {
       int neighborID = currentVertex->m_adjacencyList[i].second->GetID();
@@ -210,7 +235,11 @@ bool Graph<T>::BFS(int from, int to)
         q.push(neighborID);
       }
     }
+
+    cout << "check 3" << endl;
   }
+
+  cout << "exiting bfs" << endl;
 
   return visited[to];
 }
