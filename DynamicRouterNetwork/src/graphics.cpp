@@ -1,7 +1,8 @@
 #include "graphics.h"
 
 Graphics::Graphics() {
-
+	minCost = 99999;
+	maxCost = 0;
 }
 
 Graphics::~Graphics() {
@@ -111,7 +112,11 @@ bool Graphics::Initialize(int width, int height) {
 void Graphics::Update(unsigned int dt) {
 	// Update the object
 	m_cube->Update(dt);
+}
+
+void Graphics::StepSimulation() {
 	drn.Update();
+	//calulate dijkstras
 }
 
 void Graphics::RenderObjects(Shader *shader) {
@@ -128,6 +133,7 @@ void Graphics::RenderObjects(Shader *shader) {
 }
 
 void Graphics::RenderAllConnections(Shader *shader) {
+
 	//pass in default matrices
 
 	glUniformMatrix4fv(shader->GetUniformLocation("projectionMatrix"), 1, GL_FALSE,
@@ -147,7 +153,15 @@ void Graphics::RenderAllConnections(Shader *shader) {
 		if (vertex != NULL) {
 			for (int j = 0; j < size; j++) {
 				if (vertex->IsConnectedTo(j)) {
-					glm::vec2 color = glm::vec2((vertex->GetEdgeCost(j)-1.5)*1.9, 0.0);
+
+					//update min and max cost
+					double cost = vertex->GetEdgeCost(j);
+					if (cost < minCost)
+						minCost = cost;
+					if (cost > maxCost)
+						maxCost = cost;
+
+					glm::vec2 color = glm::vec2((cost-minCost)/maxCost-minCost, 0.0);
 					glUniform2fv(shader->GetUniformLocation("lineColor"), 1,
 							glm::value_ptr(color));
 					RenderConnection(RouterPosition(i, size), RouterPosition(j, size));
@@ -186,7 +200,7 @@ glm::vec3 Graphics::RouterPosition(int routerNum, int routerCount) {
 	float colSpace = 1;
 
 	//set position
-	float xPos = rowNum*rowSpace - rowCount*rowSpace*0.5;
+	float xPos = rowNum*rowSpace - (rowCount-1)*rowSpace/2;
 	float zPos = (colSpace*2*rowPair + colSpace*rowOffset) - ((routerCount / rowCount)*colSpace)/2;
 	return glm::vec3(xPos,0,zPos);
 }

@@ -19,6 +19,7 @@ class Graphics
     bool Initialize(int width, int height);
     void Update(unsigned int dt);
     void Render();
+    void StepSimulation();
 
   private:
     void RenderObjects(Shader*);
@@ -44,6 +45,9 @@ class Graphics
     FrameBuffer *m_frameBuffer;
     FrameBuffer *m_shadowBuffer;
     glm::mat4 lightMatrix;
+
+    float minCost;
+    float maxCost;
 
     Object *m_cube;
 };
