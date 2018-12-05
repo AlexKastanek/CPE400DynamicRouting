@@ -4,7 +4,7 @@ Object::Object() {
 	//updated file loading
 	loader fileLoader;
 	obj cube;
-	fileLoader.loadObject("assets/teapot.ob", cube);
+	fileLoader.loadObject("assets/router.ob", cube);
 	Vertices = cube.getVerts();
 	Indices = cube.getIndices();
 

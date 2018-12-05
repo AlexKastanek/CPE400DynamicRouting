@@ -10,7 +10,7 @@ using namespace std;
 
 int main(void) {
 	// Start an engine and run it then cleanup after
-	Engine *engine = new Engine("Tutorial Window Name", 960, 540);
+	Engine *engine = new Engine("Dynamic Router Network", 0, 0);
 	if (!engine->Initialize()) {
 		printf("The engine failed to start.\n");
 		delete engine;
