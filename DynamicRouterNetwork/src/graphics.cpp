@@ -128,6 +128,8 @@ void Graphics::StepSimulation() {
 }
 
 void Graphics::CalculateShortestPath() {
+	if (path != NULL)
+		delete path;
 	switch (pathAlgorithm) {
 	case 0:
 		//no shortest path, return null
@@ -135,15 +137,20 @@ void Graphics::CalculateShortestPath() {
 		break;
 	case 1:
 		//calculate dijkstras shortest path
-		if (path != NULL)
-			delete path;
 		path = drn.BestPathDijsktra(source, destination);
+		cout << path->size();
+		if (path->size() == 0) {
+			delete path;
+			path = NULL;
+		}
 		break;
 	case 2:
 		//calculate bellman ford shortest path
-		if (path != NULL)
-			delete path;
 		path = drn.BestPathBellmanFord(source, destination);
+		if (path->size() == 0) {
+			delete path;
+			path = NULL;
+		}
 		break;
 	}
 }
@@ -347,6 +354,14 @@ void Graphics::Render() {
 	if (ImGui::RadioButton("Bellman Ford", &pathAlgorithm, 2)) {
 		cout << "Setting to Bellman Ford algorithm" << endl;
 		CalculateShortestPath();
+	}
+
+	//output a path to screen
+	if (path != NULL) {
+		ImGui::Text("Path found from Router %i to Router %i:", source, destination);
+		for (int i = 0; i < path->size(); i++) {
+			ImGui::Text("[%i]", (*path)[i]);
+		}
 	}
 
 	// Get any errors from OpenGL
