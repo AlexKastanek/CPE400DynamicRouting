@@ -14,6 +14,8 @@ Graphics::~Graphics() {
 }
 
 bool Graphics::Initialize(int width, int height) {
+	this->width = width;
+	this->height = height;
 	// Used for the linux OS
 #if !defined(__APPLE__) && !defined(MACOSX)
 	// cout << glewGetString(GLEW_VERSION) << endl;
@@ -121,6 +123,11 @@ void Graphics::Update(unsigned int dt) {
 void Graphics::StepSimulation() {
 	drn.Update();
 	//calulate based on currently selected algorithm
+	CalculateShortestPath();
+
+}
+
+void Graphics::CalculateShortestPath() {
 	switch (pathAlgorithm) {
 	case 0:
 		//no shortest path, return null
@@ -149,7 +156,7 @@ void Graphics::RenderObjects(Shader *shader) {
 		//put in a circle based on router count
 		auto vertex = graph.GetVertexWithID(i);
 		if (vertex != NULL) {
-			RenderRouter(shader, RouterPosition(i, size));
+			RenderRouter(shader, RouterPosition(i, size), vertex);
 		}
 	}
 }
@@ -246,7 +253,7 @@ glm::vec3 Graphics::RouterPosition(int routerNum, int routerCount) {
 /**
  * Renders a single router using the default mesh
  */
-void Graphics::RenderRouter(Shader *shader , glm::vec3 position) {
+void Graphics::RenderRouter(Shader *shader , glm::vec3 position, Vertex<Router> *vert) {
 	glm::mat4 newPos = glm::translate(position) * m_cube->GetModel();
 
 	// Send in the projection and view to the shader
@@ -263,6 +270,19 @@ void Graphics::RenderRouter(Shader *shader , glm::vec3 position) {
 	glUniformMatrix4fv(shader->GetUniformLocation("modelMatrix"), 1, GL_FALSE,
 			glm::value_ptr(newPos));
 	m_cube->Render();
+
+	//Render a UI element on top of the router
+	glm::vec4 v = m_camera->GetProjection() * m_camera->GetView() * newPos * glm::vec4(0,0,0,1.0);
+	v /= v.w;
+	v += glm::vec4(1,1,1,1);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0,0,0,0));
+	ImGui::Begin("Menu", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar |ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs);
+	ImGui::SetNextWindowPos(ImVec2(0,0));
+	ImGui::SetNextWindowSize(ImVec2 (width, height));
+	ImGui::SetCursorScreenPos(ImVec2(v.x * width / 2.0, height - v.y * height / 2.0));
+	ImGui::Text("Router %i", vert->GetID());
+	ImGui::End();
+	ImGui::PopStyleColor(1);
 }
 
 void Graphics::Render() {
@@ -304,30 +324,29 @@ void Graphics::Render() {
 	//render GUI
 	ImGui::Text("Shortest Path Source/Destination:");
 
-	ImGui::InputInt("Source", &source);
-	ImGui::InputInt("Destination", &destination);
+	if (ImGui::InputInt("Source", &source)) {
+		CalculateShortestPath();
+	}
+
+	if (ImGui::InputInt("Destination", &destination)) {
+		CalculateShortestPath();
+	}
 
 	ImGui::Text("Shortest Path Algorithm:");
 
 	if (ImGui::RadioButton("None", &pathAlgorithm, 0)) {
 	    cout << "Setting to no shortest path algorithm" << endl;
-		if (path != NULL)
-			delete path;
-		path = NULL;
+	    CalculateShortestPath();
 	}
 
 	if (ImGui::RadioButton("Dijkstra's", &pathAlgorithm, 1)) {
 		cout << "Setting to Dijkstra's algorithm" << endl;
-		if (path != NULL)
-			delete path;
-		path = drn.BestPathDijsktra(source, destination);
+		CalculateShortestPath();
 	}
 
 	if (ImGui::RadioButton("Bellman Ford", &pathAlgorithm, 2)) {
 		cout << "Setting to Bellman Ford algorithm" << endl;
-		if (path != NULL)
-			delete path;
-		path = drn.BestPathBellmanFord(source, destination);
+		CalculateShortestPath();
 	}
 
 	// Get any errors from OpenGL

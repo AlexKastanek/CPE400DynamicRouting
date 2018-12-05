@@ -24,9 +24,10 @@ class Graphics
 
   private:
     void RenderObjects(Shader*);
-    void RenderRouter(Shader* , glm::vec3);
+    void RenderRouter(Shader* , glm::vec3, Vertex<Router>*);
     void RenderAllConnections(Shader*);
     void RenderConnection(glm::vec3 from, glm::vec3 to);
+    void CalculateShortestPath();
     glm::vec3 RouterPosition(int routerNum, int routerCount);
     std::string ErrorString(GLenum error);
 
@@ -53,6 +54,8 @@ class Graphics
     vector<int> *path;
     int source;
     int destination;
+    int width;
+    int height;
 
     Object *m_cube;
 };

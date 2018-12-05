@@ -7,7 +7,7 @@ uniform vec2 lineColor;
 void main(void) {
 	vec3 bestColor = vec3(0,1,0);
 	vec3 worstColor = vec3(1,0,0);
-	vec3 shortestPathColor = vec3(1,1,0);
+	vec3 shortestPathColor = vec3(1,0,1);
 
 	vec3 finalColor;
 	//x channel used for rating line width
