@@ -10,6 +10,7 @@ using namespace std;
 #include "object.h"
 #include "frameBuffer.h"
 #include "DynamicRouterNetwork.h"
+#include "imgui.h"
 
 class Graphics
 {

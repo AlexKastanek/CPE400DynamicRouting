@@ -263,6 +263,11 @@ void Graphics::Render() {
 	m_screenShader->Enable();
 	m_frameBuffer->renderToScreen();
 
+	//render GUI
+	if (ImGui::Button("Meow")) {
+	    std::cout << "Meow\n";
+	}
+
 	// Get any errors from OpenGL
 	auto error = glGetError();
 	if (error != GL_NO_ERROR) {

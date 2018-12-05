@@ -6,6 +6,7 @@
 
 #include "window.h"
 #include "graphics.h"
+#include "gui.h"
 
 class Engine
 {
@@ -29,6 +30,7 @@ class Engine
     SDL_Event m_event;
 
     Graphics *m_graphics;
+    GUI *m_gui;
     unsigned int m_DT;
     long long m_currentTimeMillis;
     bool m_running;

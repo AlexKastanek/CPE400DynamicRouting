@@ -37,6 +37,9 @@ bool Engine::Initialize() {
 		return false;
 	}
 
+	//start the gui
+	m_gui = new GUI(m_window->gWindow);
+
 	// Set the time
 	m_currentTimeMillis = GetCurrentTimeMillis();
 
@@ -57,8 +60,10 @@ void Engine::Run() {
 		}
 
 		// Update and render the graphics
+		m_gui->Update(m_DT);
 		m_graphics->Update(m_DT);
 		m_graphics->Render();
+		m_gui->Render();
 
 		// Swap to the Window
 		m_window->Swap();
