@@ -147,7 +147,6 @@ void Graphics::RenderAllConnections(Shader *shader) {
 		if (vertex != NULL) {
 			for (int j = 0; j < size; j++) {
 				if (vertex->IsConnectedTo(j)) {
-					cout << vertex->GetEdgeCost(j) << endl;
 					glm::vec2 color = glm::vec2((vertex->GetEdgeCost(j)-1.5)*1.9, 0.0);
 					glUniform2fv(shader->GetUniformLocation("lineColor"), 1,
 							glm::value_ptr(color));
@@ -170,9 +169,26 @@ void Graphics::RenderConnection(glm::vec3 from, glm::vec3 to) {
 }
 
 glm::vec3 Graphics::RouterPosition(int routerNum, int routerCount) {
-	float radius = 2;
-	double angle = glm::radians((360.0/routerCount)*routerNum);
-	return glm::vec3(glm::cos(angle)*radius,0,glm::sin(angle)*radius);
+	//update positioning based on hex grid
+	int rowCount = glm::sqrt(routerCount);
+	float rowSpace = 2;
+	int rowOffset = routerNum % rowCount;
+	if (rowOffset % 2 == 0) {
+		//if even, put on top row
+		rowOffset = 0;
+	} else {
+		rowOffset = 1;
+	}
+	int rowNum = routerNum % rowCount;
+	int rowPair = routerNum / rowCount;
+
+	//calculate column spacing based on router count
+	float colSpace = 1;
+
+	//set position
+	float xPos = rowNum*rowSpace - rowCount*rowSpace*0.5;
+	float zPos = (colSpace*2*rowPair + colSpace*rowOffset) - ((routerCount / rowCount)*colSpace)/2;
+	return glm::vec3(xPos,0,zPos);
 }
 
 /**
