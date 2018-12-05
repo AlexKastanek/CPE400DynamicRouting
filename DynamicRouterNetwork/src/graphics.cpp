@@ -128,42 +128,53 @@ void Graphics::StepSimulation() {
 }
 
 void Graphics::CalculateShortestPath() {
-	if (path != NULL)
-		delete path;
-	switch (pathAlgorithm) {
-	case 0:
-		//no shortest path, return null
-		path = NULL;
-		break;
-	case 1:
-		//calculate dijkstras shortest path
-		path = drn.BestPathDijsktra(source, destination);
-		cout << path->size();
-		if (path->size() == 0) {
-			delete path;
-			path = NULL;
-		}
-		break;
-	case 2:
-		//calculate bellman ford shortest path
-		path = drn.BestPathBellmanFord(source, destination);
-		if (path->size() == 0) {
-			delete path;
-			path = NULL;
-		}
-		break;
-	}
+  Graph<Router> graph = drn.GetGraph();
+  if (!graph.BFS(source, destination) || source == destination)
+  {
+    if (path != NULL)
+    {
+      delete path;
+      path = NULL;
+    }
+  }
+  else
+  {
+    if (path != NULL)
+    {
+      delete path;
+      path = NULL;
+    }
+    switch (pathAlgorithm) {
+    case 0:
+      //no shortest path, return null
+      //delete path;
+      //path = NULL;
+      break;
+    case 1:
+      //calculate dijkstras shortest path
+      path = drn.BestPathDijsktra(source, destination);
+      cout << path->size();
+      break;
+    case 2:
+      //calculate bellman ford shortest path
+      path = drn.BestPathBellmanFord(source, destination);
+      cout << path->size();
+      break;
+    }
+  }
 }
 
 void Graphics::RenderObjects(Shader *shader) {
 	//read graph state and render routers
 	Graph<Router> graph = drn.GetGraph();
 	int size = graph.GetMap().size();
-	for (int i = 0; i < size; i++) {
+  map<int, Vertex<Router>*> map = graph.GetMap();
+  typename map<int, Vertex<Router>*>::iterator it;
+	for (it = map.begin(); it != map.end(); it++) {
 		//put in a circle based on router count
-		auto vertex = graph.GetVertexWithID(i);
+		auto vertex = graph.GetVertexWithID(it->first);
 		if (vertex != NULL) {
-			RenderRouter(shader, RouterPosition(i, size), vertex);
+			RenderRouter(shader, RouterPosition(it->first, size), vertex);
 		}
 	}
 }
@@ -183,42 +194,42 @@ void Graphics::RenderAllConnections(Shader *shader) {
 
 	//read graph state and render routers
 	Graph<Router> graph = drn.GetGraph();
-	int size = graph.GetMap().size();
+  map<int, Vertex<Router>*> map = graph.GetMap();
+	int size = map.size();
+  typename map<int, Vertex<Router>*>::iterator it;
 
-	for (int i = 0; i < size; i++) {
-		auto vertex = graph.GetVertexWithID(i);
-		if (vertex != NULL) {
-			for (int j = 0; j < size; j++) {
-				if (vertex->IsConnectedTo(j)) {
+	for (it = map.begin(); it != map.end(); it++) {
+		Vertex<Router>* vertex = graph.GetVertexWithID(it->first);
+			for (int j = 0; j < vertex->m_adjacencyList.size(); j++) 
+      {
+        Vertex<Router>* neighbor = vertex->m_adjacencyList[j].second;
 
-					//update min and max cost
-					double cost = vertex->GetEdgeCost(j);
-					if (cost < minCost)
-						minCost = cost;
-					if (cost > maxCost)
-						maxCost = cost;
+				//update min and max cost
+				double cost = vertex->GetEdgeCost(neighbor->GetID());
+				if (cost < minCost)
+					minCost = cost;
+				if (cost > maxCost)
+					maxCost = cost;
 
-					//calculate link quality
-					glm::vec2 color = glm::vec2((cost-minCost)/maxCost-minCost, 0.0);
+				//calculate link quality
+				glm::vec2 color = glm::vec2((cost-minCost)/maxCost-minCost, 0.0);
 
-					//display if shortest path
-					if (path != NULL) {
-						vector<int>::iterator it = path->begin();
-						it++;
-						while (it != path->end()) {
-							if ((*(it-1) == i && *it == j) || (*(it-1) == j && *it == i)) {
-								color.y = 1.0;
-							}
-							it++;
+				//display if shortest path
+				if (path != NULL) {
+					vector<int>::iterator it_path = path->begin();
+					it_path++;
+					while (it_path != path->end()) {
+						if ((*(it_path-1) == it->first && *it_path == neighbor->GetID()) || (*(it_path-1) == neighbor->GetID() && *it_path == it->first)) {
+							color.y = 1.0;
 						}
+						it_path++;
 					}
-
-					//render
-					glUniform2fv(shader->GetUniformLocation("lineColor"), 1,
-							glm::value_ptr(color));
-					RenderConnection(RouterPosition(i, size), RouterPosition(j, size));
 				}
-			}
+
+				//render
+				glUniform2fv(shader->GetUniformLocation("lineColor"), 1,
+				glm::value_ptr(color));
+				RenderConnection(RouterPosition(it->first, size), RouterPosition(neighbor->GetID(), size));
 		}
 	}
 }
@@ -363,6 +374,10 @@ void Graphics::Render() {
 			ImGui::Text("[%i]", (*path)[i]);
 		}
 	}
+  else
+  {
+    ImGui::Text("No path is found");
+  }
 
 	// Get any errors from OpenGL
 	auto error = glGetError();
